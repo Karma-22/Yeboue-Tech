@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+/*
+ * Charte d'interface Yéboué Tech.
+ *
+ * La charte de marque (dossier Yeboue-Tech-charte) fixe le logo, les trois
+ * couleurs et la police du nom. Ce fichier l'étend aux besoins de l'interface :
+ * nuances de texte, états, signal, rayons, ombres et styles de titres.
+ * Chaque couple texte / fond utilisé ici a été vérifié à 4,5:1 au minimum.
+ */
+
+/* Le thème sombre s'active sur tout bloc qui porte data-theme="dark". */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  /* On retire la palette par défaut : seules les couleurs de la charte existent. */
+  --color-*: initial;
+
+  /* Les trois couleurs de la marque. Elles ne changent jamais selon le thème. */
+  --color-ink: #14213d;
+  --color-ember: #f2622e;
+  --color-ivory: #faf6ef;
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Rayons. Le symbole a un arrondi égal au quart de sa taille : même règle ici. */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5625rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  /* Ombres douces, teintées d'encre. Pas de halo. */
+  --shadow-*: initial;
+  --shadow-xs: 0 1px 2px rgb(20 33 61 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(20 33 61 / 0.05), 0 2px 6px -2px rgb(20 33 61 / 0.08);
+  --shadow-md: 0 2px 6px -2px rgb(20 33 61 / 0.08), 0 10px 24px -8px rgb(20 33 61 / 0.16);
+  --shadow-lg: 0 4px 12px -4px rgb(20 33 61 / 0.1), 0 28px 56px -20px rgb(20 33 61 / 0.28);
+
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-overlay-in: overlay-in 180ms var(--ease-out) both;
+  --animate-overlay-out: overlay-out 140ms var(--ease-in) both;
+  --animate-dialog-in: dialog-in 220ms var(--ease-emphasized) both;
+  --animate-dialog-out: dialog-out 140ms var(--ease-in) both;
+  --animate-sheet-in: sheet-in 280ms var(--ease-emphasized) both;
+  --animate-sheet-out: sheet-out 180ms var(--ease-in) both;
+  --animate-live: live 1.6s var(--ease-out) infinite;
+  --animate-scan: scan 2.6s var(--ease-in-out) infinite;
+
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes overlay-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.97);
+    }
+  }
+  @keyframes dialog-out {
+    to {
+      opacity: 0;
+      transform: translateY(0.25rem) scale(0.98);
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes sheet-out {
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes live {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 55%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 0.375rem transparent;
+    }
+  }
+  @keyframes scan {
+    0%,
+    100% {
+      top: 12%;
+    }
+    50% {
+      top: 88%;
+    }
+  }
+}
+
+/* Polices et couleurs de rôle : leur valeur dépend du contexte (thème, next/font). */
+@theme inline {
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-bricolage), var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-on-accent: var(--on-accent);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-signal: var(--signal);
+  --color-signal-text: var(--signal-text);
+  --color-signal-soft: var(--signal-soft);
+
+  --color-success: var(--success);
+  --color-success-text: var(--success-text);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-text: var(--warning-text);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-on-danger: var(--on-danger);
+  --color-danger-text: var(--danger-text);
+  --color-danger-soft: var(--danger-soft);
+
+  --color-focus: var(--focus);
+  --color-overlay: var(--overlay);
+}
+
+@layer base {
+  :root,
+  [data-theme="light"] {
+    color-scheme: light;
+
+    --surface: #faf6ef; /* ivoire : fond de page */
+    --surface-raised: #fffdfa; /* cartes, champs, fenêtres */
+    --surface-sunken: #efebe6; /* zones en retrait */
+    --fg: #14213d; /* encre : 14,8:1 sur ivoire */
+    --fg-muted: #4b5468; /* 7:1 */
+    --fg-subtle: #62697a; /* 5,1:1 */
+    --line: #dcdad8; /* filets */
+    --line-strong: #878c96; /* contours de champs : 3,1:1 */
+
+    --accent: #f2622e; /* braise : l'action. Texte encre dessus : 5:1 */
+    --accent-hover: #f57242;
+    --accent-active: #f1561e;
+    --on-accent: #14213d;
+    --accent-text: #b6390c; /* braise lisible en texte : 5,4:1 */
+    --accent-soft: #f9e6da;
+
+    --signal: #2ec2ea; /* cyan : le scan et le direct, rien d'autre */
+    --signal-text: #0c6d88;
+    --signal-soft: #dbeeee;
+
+    --success: #238b5a;
+    --success-text: #1c6e48;
+    --success-soft: #e0e9dd;
+    --warning: #f2a60d;
+    --warning-text: #7e5607;
+    --warning-soft: #f8e6c2;
+    --danger: #bc243d;
+    --danger-hover: #a31f35;
+    --on-danger: #faf6ef;
+    --danger-text: #b4223b;
+    --danger-soft: #f4e3df;
+
+    --focus: #14213d;
+    --overlay: rgb(20 33 61 / 0.5);
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --surface: #14213d;
+    --surface-raised: #222e48;
+    --surface-sunken: #0e182c;
+    --fg: #faf6ef;
+    --fg-muted: #bebfc1;
+    --fg-subtle: #9598a1;
+    --line: #343f56;
+    --line-strong: #757a88;
+
+    --accent-text: #f7784a;
+    --accent-soft: #402e3a;
+
+    --signal-text: #3cc6ec;
+    --signal-soft: #194160;
+
+    --success: #2eb877;
+    --success-text: #5cd69d;
+    --success-soft: #173643;
+    --warning-text: #f5b83d;
+    --warning-soft: #403c33;
+    --danger-hover: #d02a45;
+    --danger-text: #f18395;
+    --danger-soft: #36223d;
+
+    --focus: #faf6ef;
+    --overlay: rgb(5 10 22 / 0.65);
+  }
+
+  /* Un bloc qui change de thème reprend la couleur de texte de ce thème. */
+  [data-theme] {
+    color: var(--fg);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+ * Styles de texte. Les titres sont en Bricolage Grotesque, légèrement resserrée ;
+ * le reste en Hanken Grotesk.
+ */
+@utility type-display-1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 1.5rem + 5.4vw, 5.75rem);
+  font-weight: 700;
+  font-stretch: 94%;
+  line-height: 0.96;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+@utility type-display-2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.125rem, 1.5rem + 2.8vw, 3.75rem);
+  font-weight: 700;
+  font-stretch: 96%;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+@utility type-display-3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 1.35rem + 1.2vw, 2.375rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+@utility type-title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+@utility type-lead {
+  font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+@utility type-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}

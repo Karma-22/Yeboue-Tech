@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Fermé par défaut. L'envoi des photos par les gérants et leur lecture
+// publique seront ouverts à l'étape 1c (ARCHITECTURE.md §12).
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

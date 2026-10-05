@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Le symbole de la charte. Sur un onglet sombre, il passe en version claire (logo-full-light). -->
+  <style>
+    .ring { fill: #14213D; }
+    .hole { fill: #FAF6EF; }
+    @media (prefers-color-scheme: dark) {
+      .ring { fill: #FAF6EF; }
+      .hole { fill: #14213D; }
+    }
+  </style>
+  <rect class="ring" x="4" y="4" width="56" height="56" rx="16"/>
+  <rect class="hole" x="14" y="14" width="36" height="36" rx="9"/>
+  <circle cx="32" cy="32" r="9" fill="#F2622E"/>
+</svg>

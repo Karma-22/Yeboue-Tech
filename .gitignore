@@ -1,0 +1,6 @@
+# Fichiers créés par Windows et macOS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Le reste est réglé dans plateforme/.gitignore

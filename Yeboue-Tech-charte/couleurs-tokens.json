@@ -1,0 +1,41 @@
+{
+  "name": "Yéboué Tech",
+  "version": 1,
+  "color": {
+    "themes": [
+      { "id": "light", "name": "Clair" },
+      { "id": "dark", "name": "Sombre" }
+    ],
+    "tokens": [
+      { "name": "ink", "value": { "light": "#14213D", "dark": "#14213D" }, "usage": "Encre. Carré extérieur du symbole et nom sur fond clair. Contraste 15:1 sur ivory." },
+      { "name": "ember", "value": { "light": "#F2622E", "dark": "#F2622E" }, "usage": "Braise. Forme centrale du symbole (l'assiette). Contraste 3:1 sur ivory : réservé aux formes et au texte de 24px et plus, jamais au petit texte." },
+      { "name": "ivory", "value": { "light": "#FAF6EF", "dark": "#FAF6EF" }, "usage": "Ivoire. Espace entre l'anneau et l'assiette ; nom sur fond sombre." },
+      { "name": "surface", "value": { "light": "{ivory}", "dark": "{ink}" }, "usage": "Fond de page : ivory en clair, ink en sombre." },
+      { "name": "text", "value": { "light": "{ink}", "dark": "{ivory}" }, "usage": "Texte et anneau du symbole sur surface ; s'inverse avec le thème comme logo-full / logo-full-light." },
+      { "name": "accent", "value": { "light": "{ember}", "dark": "{ember}" }, "usage": "Accent de marque, identique dans les deux thèmes. Mêmes limites de contraste que ember." }
+    ]
+  },
+  "type": {
+    "fonts": [
+      { "family": "Bricolage Grotesque", "file": "fonts/BricolageGrotesque-700.woff2", "weight": "700" }
+    ],
+    "families": {
+      "display": "\"Bricolage Grotesque\", system-ui, sans-serif"
+    },
+    "groups": [
+      {
+        "name": "Logo",
+        "family": "display",
+        "styles": [
+          { "name": "wordmark", "fontSize": "28px", "lineHeight": "1", "fontWeight": 700, "letterSpacing": "-0.02em" }
+        ]
+      }
+    ]
+  },
+  "radius": {
+    "tokens": [
+      { "name": "radius-mark-outer", "value": "16px", "usage": "Arrondi du carré extérieur du symbole (grille 64×64)." },
+      { "name": "radius-mark-inner", "value": "9px", "usage": "Arrondi de l'espace ivoire du symbole (grille 64×64)." }
+    ]
+  }
+}
