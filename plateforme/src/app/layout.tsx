@@ -32,10 +32,22 @@ export const viewport: Viewport = {
   themeColor: "#FAF6EF",
 };
 
+/*
+ * Applique le mode sombre avant le premier affichage, si la personne l'a
+ * choisi lors d'une visite précédente (bouton de l'en-tête). Sans ce script, la
+ * page apparaîtrait d'abord claire, puis basculerait. La clé « theme » est celle
+ * de src/components/marketing/theme-toggle.tsx.
+ */
+const THEME_SCRIPT = `try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+    // Le script ci-dessous peut ajouter data-theme avant que React ne prenne la main.
+    <html lang="fr" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {children}
+      </body>
     </html>
   );
 }

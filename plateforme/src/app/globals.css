@@ -7,6 +7,10 @@
  * couleurs et la police du nom. Ce fichier l'étend aux besoins de l'interface :
  * nuances de texte, états, signal, rayons, ombres et styles de titres.
  * Chaque couple texte / fond utilisé ici a été vérifié à 4,5:1 au minimum.
+ *
+ * Thèmes : la page est claire, ou sombre quand <html> porte data-theme="dark"
+ * (bouton de l'en-tête). Un bloc peut forcer le sien avec data-theme="light"
+ * ou "dark", ou prendre l'inverse de la page avec data-theme="contrast".
  */
 
 /*
@@ -173,7 +177,8 @@
 
 @layer base {
   :root,
-  [data-theme="light"] {
+  [data-theme="light"],
+  [data-theme="dark"] [data-theme="contrast"] {
     color-scheme: light;
 
     --surface: #faf6ef; /* ivoire : fond de page */
@@ -212,7 +217,8 @@
     --overlay: rgb(20 33 61 / 0.5);
   }
 
-  [data-theme="dark"] {
+  [data-theme="dark"],
+  [data-theme="contrast"] {
     color-scheme: dark;
 
     --surface: #14213d;
@@ -241,6 +247,14 @@
 
     --focus: #faf6ef;
     --overlay: rgb(5 10 22 / 0.65);
+  }
+
+  /* Un bloc sombre posé dans une page déjà sombre descend d'un ton, pour rester distinct. */
+  [data-theme="dark"] [data-theme="dark"] {
+    --surface: #0e182c;
+    --surface-raised: #1a2742;
+    --surface-sunken: #0a1222;
+    --line: #2a3654;
   }
 
   /* Un bloc qui change de thème reprend la couleur de texte de ce thème. */
@@ -339,4 +353,22 @@
   line-height: 1.2;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+/*
+ * Le billet : une carte en deux parties, avec une encoche ronde de chaque côté
+ * à leur jonction, comme un ticket qu'on détache.
+ */
+@utility ticket-top {
+  --notch: 0.75rem;
+  mask:
+    radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
+}
+
+@utility ticket-bottom {
+  --notch: 0.75rem;
+  mask:
+    radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
 }

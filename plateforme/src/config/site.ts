@@ -19,13 +19,12 @@ export const site = {
   },
 } as const;
 
-/** Lien qui ouvre WhatsApp sur le numéro de Yéboué Tech, avec un message déjà écrit. */
+/**
+ * Lien qui ouvre WhatsApp sur le numéro de Yéboué Tech, avec un message déjà écrit.
+ * Tant que l'inscription n'existe pas (étape 1a), c'est là que mènent les boutons
+ * « Créer mon menu » ; ensuite, ce sera /inscription.
+ */
 export function whatsappUrl(message: string): string {
   return `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
-/*
- * Où mènent les boutons « Créer mon menu ». Tant que l'inscription n'existe pas
- * (étape 1a), ils ouvrent une conversation WhatsApp ; ensuite, ce sera /inscription.
- */
-export const signupHref = whatsappUrl("Bonjour, je souhaite créer le menu de mon établissement.");

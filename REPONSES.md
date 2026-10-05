@@ -76,6 +76,15 @@ Les concurrents relevés :
 | Menu Digital SN | Sénégal | À partir de 10 000 F |
 | Services internationaux | — | Environ 8 500 à 18 000 F |
 
+### Que veut dire « 10 accès pour votre équipe » ?
+Un accès, c'est un compte pour une personne de l'équipe du restaurant. Au lieu de partager un seul mot de passe, chacun se connecte avec le sien et ne voit que ce qui le concerne :
+- le **serveur** voit et traite les commandes ;
+- la **cuisine** voit les plats à préparer ;
+- le **gérant** modifie le menu, les prix, les photos ;
+- le **propriétaire** est le seul à gérer l'abonnement et à inviter ou retirer quelqu'un.
+
+L'offre Menu donne 2 accès (le propriétaire et une autre personne), l'offre Menu + Commande en donne 10. Quand un employé s'en va, le propriétaire retire son accès d'un geste, sans changer de mot de passe pour tout le monde. Le détail des droits est dans ARCHITECTURE.md, section 2.
+
 ### Comment se situent ces prix ?
 Le Menu est au prix d'entrée des concurrents. L'offre complète est au niveau de l'offre « Pro » du concurrent ivoirien, mais sans limite de plats ni de commandes : c'est l'argument à mettre en avant.
 

@@ -19,6 +19,9 @@ Tout ce qui est marqué **(hypothèse)** est une proposition à confirmer, pas u
 | Prix | Menu : 10 000 F par mois. Menu + Commande : 25 000 F par mois |
 | Images | Des cartes avec de vraies photos, jamais de simples icônes ; de la vidéo quand elle sert |
 | Emplacement du code | Dossier `plateforme/` ; l'ancien site reste à la racine comme référence |
+| Types d'établissement | Restaurants, maquis, bars et lounges, hôtels, résidences meublées : une page du site pour chacun |
+| Langues du site | Français et anglais |
+| Apparence | Mode clair par défaut, mode sombre au choix du visiteur |
 | Modèles de page | Plus de trois, avec couleur personnalisable |
 | Modifications du menu | Faites par le gérant lui-même |
 | Photos | Fournies par le gérant ; photographe partenaire en option payante (contrat géré par toi) |

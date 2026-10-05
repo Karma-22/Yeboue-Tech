@@ -5,7 +5,7 @@ Le pourquoi des choix est dans [PROJET-SAAS.md](PROJET-SAAS.md), les explication
 
 Le code vit dans le dossier [plateforme/](plateforme/). L'ancien site (`index.html`, `css/`, `js/`) reste à la racine comme référence pour l'animation du téléphone.
 
-**Avancement : étape 0 terminée le 5 octobre 2026. Étape 2a (page d'accueil) : première version faite le 5 octobre 2026, à valider.**
+**Avancement : étape 0 terminée le 5 octobre 2026. Étape 2a (page d'accueil) : deuxième version faite le 5 octobre 2026 (pages par type d'établissement, anglais, mode sombre), à valider.**
 
 Convention : **le code est écrit en anglais** (noms de fichiers, de variables, de collections), **l'interface est en français**. Un lexique figure en fin de document.
 
@@ -112,11 +112,15 @@ Une inscription par Google saute cette étape : Google a déjà vérifié l'adre
 | Adresse | Contenu |
 |---|---|
 | `/` | Accueil, animation du téléphone |
+| `/solutions/{type}` | Une page par type d'établissement, avec son propre « comment ça marche » : `restaurants`, `maquis`, `bars-lounges`, `hotels`, `residences` |
+| `/en`, `/en/solutions/{type}` | Les mêmes pages en anglais |
 | `/tarifs` | Offres |
 | `/fonctionnement` | Comment ça marche |
 | `/demo` | Lien vers l'établissement de démonstration |
 | `/contact` | Formulaire, WhatsApp |
 | `/mentions-legales`, `/confidentialite`, `/cgv` | Pages légales |
+
+L'en-tête propose le changement de langue, le mode clair ou sombre, et un menu qui monte du bas de l'écran sur téléphone.
 
 Pour l'instant, la page d'accueil réunit tout : ses sections se rejoignent par les ancres `#pour-qui`, `#fonctionnement`, `#tarifs` et `#questions`. Les pages séparées viennent à l'étape 2b.
 
@@ -205,7 +209,7 @@ adminLogs/{logId}
 ### `establishments/{estId}`
 | Champ | Rôle |
 |---|---|
-| `name`, `slug`, `type` | Nom, identifiant d'adresse, type (`restaurant`, `maquis`, `bar`, `hotel`) |
+| `name`, `slug`, `type` | Nom, identifiant d'adresse, type (`restaurant`, `maquis`, `bar`, `hotel`, `residence`) |
 | `ownerId` | Propriétaire |
 | `description`, `address`, `district`, `city` | Présentation |
 | `phone`, `whatsapp` | Contacts |
@@ -512,7 +516,8 @@ Dans les deux cas, la suite est identique : création du document `payments` et 
 ```
 src/
   app/
-    (marketing)/            site vitrine
+    (marketing)/            site vitrine, en français
+    en/                     site vitrine, en anglais (mêmes composants, autres textes)
     (auth)/                 inscription, connexion, invitation
     app/                    tableau de bord
       [estId]/
@@ -538,6 +543,7 @@ src/
     dashboard/              éléments du tableau de bord
     public/                 panier, fiche article, suivi de commande
   templates/                modèles de page + registre
+  i18n/                     les langues du site vitrine : textes français et anglais, adresses par langue
   lib/
     firebase/               connexion à Firebase (navigateur et serveur)
     db/                     SEUL endroit qui lit et écrit Firestore
@@ -560,6 +566,10 @@ scripts/
 firestore.rules
 storage.rules
 ```
+
+### Langues et thèmes
+- **Deux langues pour le site vitrine** : le français à la racine, l'anglais sous `/en`. Tous les textes sont dans `src/i18n/dictionaries` ; un test vérifie que les deux langues ont exactement la même forme. Le tableau de bord et l'administration restent en français pour l'instant.
+- **Mode clair et mode sombre** : la page est claire par défaut ; le bouton de l'en-tête pose `data-theme="dark"` sur la page et le navigateur retient le choix. Toutes les couleurs passent par les jetons de `globals.css`, donc chaque composant suit sans rien faire.
 
 Trois règles de rangement :
 1. **Seul `lib/db` parle à Firestore.** Aucune page, aucun composant.

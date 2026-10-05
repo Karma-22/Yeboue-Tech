@@ -1,128 +1,173 @@
+import Image from "next/image";
 import { Check } from "lucide-react";
 import { buttonStyles } from "@/components/ui/button";
 import { PLANS, TRIAL, type Plan } from "@/config/plans";
-import { signupHref } from "@/config/site";
+import { whatsappUrl } from "@/config/site";
+import type { Dictionary } from "@/i18n";
 import { cn } from "@/lib/utils/cn";
 import { formatPrice } from "@/lib/utils/format";
+import photographer from "@/assets/photos/photographe.jpg";
+import setup from "@/assets/photos/installation.jpg";
+import { PricingMotion } from "./pricing-motion";
 
-/* Les prix et le nombre de comptes viennent de src/config/plans.ts ; seul le texte est écrit ici. */
+/* Les prix et le nombre d'accès viennent de src/config/plans.ts ; les textes, des dictionnaires. */
 
-const MENU_POINTS = [
-  "Votre page, à votre nom et à vos couleurs",
-  "Plats et photos illimités",
-  "Un QR Code qui ne change jamais",
-  "Menu en français et en anglais",
-  "Commande à emporter par WhatsApp",
-  "Nombre de scans, jour par jour",
-];
+/** Le prix de l'installation clé en main, en FCFA. */
+const SETUP_PRICE = 85_000;
 
-const ORDERS_POINTS = [
-  "Un QR Code par table",
-  "Commande depuis la table",
-  "Écran de commandes en direct au comptoir",
-  "Avis des clients et carte de fidélité",
-  "Vos ventes, plat par plat",
-];
+export function Pricing({ dict }: { dict: Dictionary }) {
+  const copy = dict.pricing;
+  const signup = whatsappUrl(dict.signupMessage);
+  const servicePhotos = [setup, photographer];
+  const servicePrices = [`${formatPrice(SETUP_PRICE)}, ${copy.once}`, copy.onQuote];
 
-const SERVICES = [
-  {
-    name: "Installation clé en main",
-    detail: "Nous saisissons votre menu, imprimons et posons vos QR Codes, et formons votre équipe.",
-    price: `${formatPrice(85_000)}, une fois`,
-  },
-  {
-    name: "Séance photo de vos plats",
-    detail: "Un photographe partenaire vient chez vous.",
-    price: "Sur devis",
-  },
-];
-
-export function Pricing() {
   return (
     <div>
-      <div className="grid gap-5 lg:grid-cols-2">
-        <PlanCard plan={PLANS.menu} points={MENU_POINTS} summary="Votre carte en ligne, toujours à jour." />
-        <PlanCard
-          plan={PLANS.menu_orders}
-          points={ORDERS_POINTS}
-          summary="La carte, et les commandes qui arrivent au comptoir."
-          lead="Tout ce qu'il y a dans Menu, et en plus :"
-          featured
+      <PricingMotion className="grid gap-8 pt-4 lg:grid-cols-2 lg:gap-10">
+        <Ticket
+          plan={PLANS.menu}
+          summary={copy.plans.menu.summary}
+          points={copy.plans.menu.points}
+          copy={copy}
+          href={signup}
+          className="lg:-rotate-1"
         />
-      </div>
+        <Ticket
+          plan={PLANS.menu_orders}
+          summary={copy.plans.menu_orders.summary}
+          points={copy.plans.menu_orders.points}
+          lead={copy.includedLead}
+          copy={copy}
+          href={signup}
+          featured
+          className="lg:rotate-1"
+        />
+      </PricingMotion>
 
-      <p data-reveal className="mt-6 text-fg-muted">
-        Essai gratuit de {TRIAL.days} jours avec toutes les fonctions. Sans engagement : vous
-        arrêtez quand vous voulez.
+      <p data-reveal className="mt-10 text-fg-muted">
+        {copy.trial.replace("{days}", String(TRIAL.days))}
       </p>
 
-      <dl data-reveal className="mt-14 grid gap-6 border-t border-line pt-10">
-        {SERVICES.map((service) => (
-          <div key={service.name}>
-            <div className="flex items-baseline gap-3">
-              <dt className="type-title">{service.name}</dt>
-              <span
-                aria-hidden="true"
-                className="hidden min-w-6 flex-1 border-b border-dotted border-line-strong sm:block"
+      <div className="mt-20">
+        <p data-reveal className="type-eyebrow text-accent-text">
+          {copy.servicesEyebrow}
+        </p>
+        <h3 data-reveal className="type-display-3 mt-3">
+          {copy.servicesTitle}
+        </h3>
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
+          {copy.services.map((service, index) => (
+            <article
+              key={service.name}
+              data-reveal
+              className="group relative isolate flex min-h-88 flex-col justify-end overflow-hidden rounded-2xl bg-ink p-6 text-ivory sm:p-8"
+            >
+              <Image
+                src={servicePhotos[index]}
+                alt={service.alt}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                placeholder="blur"
+                className="-z-10 object-cover transition-transform duration-700 ease-emphasized group-hover:scale-105"
               />
-              <dd className="ml-auto font-semibold tabular-nums sm:ml-0">{service.price}</dd>
-            </div>
-            <dd className="mt-1 max-w-xl text-fg-muted">{service.detail}</dd>
-          </div>
-        ))}
-      </dl>
+              <div className="absolute inset-0 -z-10 bg-linear-to-t from-ink via-ink/55 to-ink/5" />
+              <p className="absolute top-5 right-5 rounded-full bg-accent px-3.5 py-1.5 text-sm font-semibold text-on-accent tabular-nums sm:top-6 sm:right-6">
+                {servicePrices[index]}
+              </p>
+              <h4 className="type-display-3">{service.name}</h4>
+              <p className="mt-3 max-w-md text-ivory/85">{service.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-interface PlanCardProps {
+interface TicketProps {
   plan: Plan;
   summary: string;
   points: string[];
   lead?: string;
+  copy: Dictionary["pricing"];
+  href: string;
   featured?: boolean;
+  className?: string;
 }
 
-function PlanCard({ plan, summary, points, lead, featured = false }: PlanCardProps) {
+/**
+ * Une offre, présentée comme un billet : le prix en haut, le détail sous la
+ * ligne de découpe. L'offre mise en avant prend l'inverse du thème de la page
+ * et porte le tampon de l'essai gratuit.
+ */
+function Ticket({ plan, summary, points, lead, copy, href, featured = false, className }: TicketProps) {
+  const surface = featured ? "bg-surface" : "bg-surface-raised";
+
   return (
     <article
-      data-reveal
-      data-theme={featured ? "dark" : undefined}
+      data-ticket
       className={cn(
-        "flex flex-col rounded-2xl p-7 sm:p-9",
-        featured ? "bg-surface" : "border border-line bg-surface-raised",
+        "transition-[rotate,translate] duration-500 ease-emphasized [perspective:1400px] hover:-translate-y-1 lg:hover:rotate-0",
+        className,
       )}
     >
-      <h3 className="type-title">{plan.name}</h3>
-      <p className="mt-1 text-fg-muted">{summary}</p>
-
-      <p className="mt-7 flex items-baseline gap-2">
-        <span className="type-display-2 tabular-nums">{formatPrice(plan.monthlyPrice)}</span>
-        <span className="text-fg-muted">par mois</span>
-      </p>
-
-      <div className="mt-7 flex-1 border-t border-line pt-6">
-        {lead && <p className="mb-3 font-semibold">{lead}</p>}
-        <ul className="grid gap-2.5">
-          {points.map((point) => (
-            <li key={point} className="flex gap-3">
-              <Check aria-hidden="true" strokeWidth={2.5} className="mt-1 size-4 shrink-0 text-accent-text" />
-              {point}
-            </li>
-          ))}
-          <li className="flex gap-3">
-            <Check aria-hidden="true" strokeWidth={2.5} className="mt-1 size-4 shrink-0 text-accent-text" />
-            {plan.maxMembers} comptes pour votre équipe
-          </li>
-        </ul>
-      </div>
-
-      <a
-        href={signupHref}
-        className={cn(buttonStyles({ variant: featured ? "primary" : "secondary", block: true }), "mt-9")}
+      <div
+        data-ticket-body
+        data-theme={featured ? "contrast" : undefined}
+        className="relative flex h-full flex-col drop-shadow-[0_18px_30px_rgb(20_33_61/0.18)]"
       >
-        Commencer l&apos;essai gratuit
-      </a>
+        <div className={cn("ticket-top rounded-t-2xl px-7 pt-8 pb-7 sm:px-9", surface)}>
+          <h3 className="type-title">{plan.name}</h3>
+          <p className="mt-1 text-fg-muted">{summary}</p>
+          <p className="mt-7 flex flex-wrap items-baseline gap-x-2">
+            <span data-price={plan.monthlyPrice} className="type-display-1 tabular-nums">
+              {formatPrice(plan.monthlyPrice)}
+            </span>
+            <span className="text-fg-muted">{copy.perMonth}</span>
+          </p>
+        </div>
+
+        <div className={cn("ticket-bottom flex flex-1 flex-col rounded-b-2xl px-7 pb-8 sm:px-9", surface)}>
+          {/* La ligne de découpe, entre les deux encoches. */}
+          <div aria-hidden="true" className="border-t-2 border-dashed border-fg/20" />
+
+          {lead && (
+            <p data-line className="mt-6 font-semibold">
+              {lead}
+            </p>
+          )}
+          <ul className={cn("grid gap-2.5", lead ? "mt-3" : "mt-6")}>
+            {[...points, copy.seats.replace("{count}", String(plan.maxMembers))].map((point) => (
+              <li key={point} data-line className="flex gap-3">
+                <Check
+                  aria-hidden="true"
+                  strokeWidth={2.5}
+                  className="mt-1 size-4 shrink-0 text-accent-text"
+                />
+                {point}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-auto pt-9">
+            <a
+              href={href}
+              className={buttonStyles({ variant: featured ? "primary" : "secondary", size: "lg", block: true })}
+            >
+              {copy.cta}
+            </a>
+          </div>
+        </div>
+
+        {featured && (
+          <p
+            data-stamp
+            className="absolute -top-4 right-6 -rotate-6 rounded-md border-2 border-accent bg-surface px-3 py-1.5 text-xs font-bold tracking-wider text-accent-text uppercase outline-2 outline-offset-2 outline-accent/40"
+          >
+            {copy.stamp}
+          </p>
+        )}
+      </div>
     </article>
   );
 }

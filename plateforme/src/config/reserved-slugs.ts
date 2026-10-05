@@ -20,6 +20,9 @@ const RESERVED = [
   "mot-de-passe-oublie",
   "invitation",
   "charte",
+  "solutions",
+  "en",
+  "fr",
 
   // Fichiers et dossiers techniques
   "brand",

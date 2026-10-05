@@ -7,6 +7,8 @@ Le plan de construction est `../ARCHITECTURE.md`. Le lire avant de coder, le sui
 - **Règles métier** dans `src/lib`, pas dans les pages : droits, état de l'abonnement, cycle de commande, totaux.
 - **Composants** : ceux d'un espace (`marketing`, `dashboard`, `public`) ne s'importent pas dans un autre ; le commun vit dans `src/components/ui`.
 - **Charte** : n'utiliser que les couleurs et styles de `src/app/globals.css`. La braise (`accent`) sert à l'action, jamais au petit texte (`accent-text` pour cela) ; le cyan (`signal`) est réservé au scan et au direct. Voir `/charte` en développement.
+- **Site vitrine en deux langues** : aucun texte en dur dans les composants de `src/components/marketing` ; tout va dans `src/i18n/dictionaries/fr.ts` et `en.ts`, qui doivent garder la même forme (un test le vérifie).
+- **Mode sombre** : ne jamais supposer que la page est claire. Utiliser les jetons (`bg-surface`, `text-fg`…), `data-theme="dark"` pour un bloc sombre, `data-theme="contrast"` pour l'inverse de la page.
 - **Téléphone d'abord** : cibles tactiles de 44 px au minimum, texte de 16 px dans les champs.
 - **Prix et limites des offres** : uniquement dans `src/config/plans.ts`.
 - **Nouvelle page à la racine du site** : ajouter son nom dans `src/config/reserved-slugs.ts` (un test le vérifie).
