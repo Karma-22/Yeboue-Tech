@@ -5,7 +5,7 @@ Le pourquoi des choix est dans [PROJET-SAAS.md](PROJET-SAAS.md), les explication
 
 Le code vit dans le dossier [plateforme/](plateforme/). L'ancien site (`index.html`, `css/`, `js/`) reste à la racine comme référence pour l'animation du téléphone.
 
-**Avancement : étape 0 terminée le 5 octobre 2026. En cours : étape 2a, la page d'accueil.**
+**Avancement : étape 0 terminée le 5 octobre 2026. Étape 2a (page d'accueil) : première version faite le 5 octobre 2026, à valider.**
 
 Convention : **le code est écrit en anglais** (noms de fichiers, de variables, de collections), **l'interface est en français**. Un lexique figure en fin de document.
 
@@ -117,6 +117,8 @@ Une inscription par Google saute cette étape : Google a déjà vérifié l'adre
 | `/demo` | Lien vers l'établissement de démonstration |
 | `/contact` | Formulaire, WhatsApp |
 | `/mentions-legales`, `/confidentialite`, `/cgv` | Pages légales |
+
+Pour l'instant, la page d'accueil réunit tout : ses sections se rejoignent par les ancres `#pour-qui`, `#fonctionnement`, `#tarifs` et `#questions`. Les pages séparées viennent à l'étape 2b.
 
 ### Comptes
 | Adresse | Contenu |
@@ -527,10 +529,12 @@ src/
       payments/webhook/     notifications de paiement (plus tard)
     charte/                 charte d'interface (développement seulement)
     globals.css             la charte : couleurs, rayons, ombres, styles de texte
+  assets/
+    photos/                 photos d'illustration du site vitrine, et SOURCES.md qui note d'où elles viennent
   components/
-    brand/                  le logo
+    brand/                  le logo, le cadre de visée
     ui/                     boutons, champs, fenêtres (base Radix, restylée)
-    marketing/              sections du site vitrine, animation du téléphone
+    marketing/              sections du site vitrine, téléphone dessiné et son animation (GSAP)
     dashboard/              éléments du tableau de bord
     public/                 panier, fiche article, suivi de commande
   templates/                modèles de page + registre

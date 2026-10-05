@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Logo, LogoMark } from "@/components/brand/logo";
+import { Viewfinder } from "@/components/brand/viewfinder";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,7 +19,6 @@ import {
 import { Field } from "@/components/ui/field";
 import { Input, Select, Textarea } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils/cn";
 import { formatPrice } from "@/lib/utils/format";
 
 export const metadata: Metadata = {
@@ -432,7 +432,13 @@ export default function ChartePage() {
               </div>
             </div>
 
-            <ScanFrame />
+            <Viewfinder
+              scanning
+              aria-hidden="true"
+              className="mx-auto grid size-48 place-items-center md:mx-0"
+            >
+              <LogoMark className="size-24" />
+            </Viewfinder>
           </div>
         </Section>
       </main>
@@ -512,23 +518,5 @@ function Swatch({ theme, token, code }: { theme: "light" | "dark"; token: string
       />
       <span className="tabular-nums text-fg-muted">{code}</span>
     </span>
-  );
-}
-
-/** Le cadre de visée d'un scan : le seul endroit où le cyan a le droit de paraître. */
-function ScanFrame() {
-  const corner = "absolute size-7 border-fg";
-  return (
-    <div
-      aria-hidden="true"
-      className="relative mx-auto grid size-48 place-items-center md:mx-0"
-    >
-      <span className={cn(corner, "top-0 left-0 rounded-tl-md border-t-2 border-l-2")} />
-      <span className={cn(corner, "top-0 right-0 rounded-tr-md border-t-2 border-r-2")} />
-      <span className={cn(corner, "bottom-0 left-0 rounded-bl-md border-b-2 border-l-2")} />
-      <span className={cn(corner, "right-0 bottom-0 rounded-br-md border-r-2 border-b-2")} />
-      <LogoMark className="size-24" />
-      <span className="absolute inset-x-3 h-0.5 animate-scan rounded-full bg-signal shadow-[0_0_10px_rgb(46_194_234/0.7)]" />
-    </div>
   );
 }

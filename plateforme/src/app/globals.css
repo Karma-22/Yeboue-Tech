@@ -9,8 +9,11 @@
  * Chaque couple texte / fond utilisé ici a été vérifié à 4,5:1 au minimum.
  */
 
-/* Le thème sombre s'active sur tout bloc qui porte data-theme="dark". */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+/*
+ * Le thème sombre s'active sur tout bloc qui porte data-theme="dark", sauf dans
+ * une île claire (data-theme="light") posée à l'intérieur.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *):not(:where([data-theme="light"], [data-theme="light"] *)));
 
 @theme {
   /* On retire la palette par défaut : seules les couleurs de la charte existent. */
@@ -48,6 +51,9 @@
   --animate-sheet-out: sheet-out 180ms var(--ease-in) both;
   --animate-live: live 1.6s var(--ease-out) infinite;
   --animate-scan: scan 2.6s var(--ease-in-out) infinite;
+  --animate-accordion-down: accordion-down 260ms var(--ease-emphasized) both;
+  --animate-accordion-up: accordion-up 200ms var(--ease-in) both;
+  --animate-rise: rise 800ms var(--ease-emphasized) both;
 
   @keyframes overlay-in {
     from {
@@ -88,6 +94,29 @@
     70%,
     100% {
       box-shadow: 0 0 0 0.375rem transparent;
+    }
+  }
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  /* Entrée du haut de page : le contenu monte légèrement en apparaissant. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
     }
   }
   @keyframes scan {
@@ -220,6 +249,7 @@
   }
 
   html {
+    scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
