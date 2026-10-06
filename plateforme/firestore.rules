@@ -1,10 +1,18 @@
 rules_version = '2';
 
-// Toute lecture et toute écriture passent par le serveur, qui vérifie les
-// droits (ARCHITECTURE.md §12). Le navigateur n'a donc aucun accès direct.
-// Seule exception prévue : l'écoute en direct des commandes, ajoutée à l'étape 4.
+// Toute écriture passe par le serveur, qui vérifie les droits (ARCHITECTURE.md §12).
+// Le navigateur ne lit directement que les commandes, pour les suivre en direct.
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /establishments/{establishmentId}/orders/{orderId} {
+      // Le client suit sa propre commande : il en connaît l'identifiant, impossible à deviner.
+      allow get: if true;
+      // Le personnel écoute les commandes de son établissement, et seulement du sien.
+      allow list: if request.auth != null
+        && exists(/databases/$(database)/documents/establishments/$(establishmentId)/members/$(request.auth.uid));
+      allow write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

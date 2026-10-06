@@ -5,7 +5,7 @@ Le pourquoi des choix est dans [PROJET-SAAS.md](PROJET-SAAS.md), les explication
 
 Le code vit dans le dossier [plateforme/](plateforme/). L'ancien site (`index.html`, `css/`, `js/`) reste à la racine comme référence pour l'animation du téléphone.
 
-**Avancement : étape 0 terminée le 5 octobre 2026. Étape 2a (page d'accueil) : deuxième version faite le 5 octobre 2026 (pages par type d'établissement, anglais, mode sombre), à valider.**
+**Avancement : voir le tableau de la section 16.**
 
 Convention : **le code est écrit en anglais** (noms de fichiers, de variables, de collections), **l'interface est en français**. Un lexique figure en fin de document.
 
@@ -616,6 +616,22 @@ Chaque étape se termine par une version qui fonctionne et que tu peux essayer.
 La page d'accueil (2a) passe avant les comptes, à ta demande du 5 octobre 2026 : on fixe d'abord à quoi le site ressemble. Tant que l'inscription n'existe pas, ses boutons « Créer mon menu » ouvrent WhatsApp.
 
 ---
+
+## 17. Ajustements du 6 octobre 2026
+
+Décidés pendant la construction du produit complet. Là où ils contredisent une section plus haut, ce sont eux qui font foi.
+
+| Sujet | Ce qui est construit |
+|---|---|
+| **Modèles de page** | Dix modèles au lieu de trois, chacun avec sa mise en page, sa typographie et ses animations. La couleur choisie par le gérant s'applique à n'importe lequel. Chaque modèle se voit sans compte à l'adresse `/apercu/{modèle}`. |
+| **Essai gratuit** | Il ne démarre plus à l'inscription mais à la fin de la création de l'établissement : le gérant choisit son offre et confirme son numéro WhatsApp, sans rien payer. L'essai porte sur l'offre choisie, qu'il peut changer pendant les 14 jours. |
+| **Fin d'essai** | L'administration liste les essais qui se terminent, avec un lien WhatsApp vers le gérant. |
+| **Connexion** | E-mail et mot de passe. La connexion se fait côté serveur : le navigateur ne charge pas Firebase Auth. La connexion par Google est remise à plus tard. |
+| **Mot de passe oublié** | Même principe que la vérification : un code à 6 chiffres par e-mail. |
+| **Photos** | Le navigateur réduit la photo, puis l'envoie au serveur, qui vérifie les droits et la range dans Storage. Le navigateur n'écrit donc jamais dans Storage ; les photos sont lisibles par tous. |
+| **Planches de QR Codes** | Une page prête à imprimer (ou à enregistrer en PDF depuis le navigateur) au lieu d'un fichier PDF fabriqué par le serveur. |
+| **Lignes sans prix** | Un article peut ne pas avoir de prix et porter une mention (« Gratuit », « Inclus ») : c'est ce qui sert aux hôtels et aux résidences. |
+| **Boutons « Créer mon menu »** | Ils mènent à `/inscription`. |
 
 ## Lexique
 

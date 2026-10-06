@@ -1,7 +1,7 @@
 rules_version = '2';
 
-// Fermé par défaut. L'envoi des photos par les gérants et leur lecture
-// publique seront ouverts à l'étape 1c (ARCHITECTURE.md §12).
+// Fermé au navigateur. Les photos sont envoyées par le serveur, qui vérifie les
+// droits, et c'est lui qui les sert, à l'adresse /api/photo (ARCHITECTURE.md §17).
 service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {

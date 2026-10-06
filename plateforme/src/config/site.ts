@@ -28,3 +28,14 @@ export function whatsappUrl(message: string): string {
   return `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
+
+/** L'adresse publique d'un établissement, ou d'une de ses tables : c'est elle qui est dessinée dans le QR Code. */
+export function publicUrl(slug: string, tableNumber?: number): string {
+  return tableNumber === undefined ? `${site.url}/${slug}` : `${site.url}/${slug}/t/${tableNumber}`;
+}
+
+/** Le site tourne encore sur un ordinateur : un QR Code imprimé maintenant ne mènerait nulle part. */
+export const isLocalSite = ["localhost", "127.0.0.1"].some((host) => site.url.includes(host));
+
+/** « yeboue.tech », sans le protocole : pour afficher une adresse. */
+export const siteHost = new URL(site.url).host;
