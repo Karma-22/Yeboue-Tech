@@ -73,10 +73,23 @@ export async function verifyEmail(_previous: FormState, formData: FormData): Pro
   if (result === "locked") return { message: "Trop d'essais. Demandez un nouveau code." };
 
   await adminAuth().updateUser(session.userId, { emailVerified: true });
-  // Nouvelle session : l'ancienne dit encore que l'adresse n'est pas vérifiée.
+  // Le cookie n'est pas touché ici : la page resterait-elle affichée, elle serait rechargée
+  // avant la fin de son animation de réussite. C'est `finishVerification` qui ouvre la suite.
+  return { ok: true };
+}
+
+/**
+ * Deuxième temps de la vérification, appelé une fois l'animation jouée : ouvre
+ * une session qui sait que l'adresse est vérifiée, puis envoie la personne là
+ * où elle allait (son invitation, ou le tableau de bord).
+ */
+export async function finishVerification(): Promise<void> {
+  const session = await getSession();
+  if (!session) redirect("/connexion");
+  const record = await adminAuth().getUser(session.userId);
+  if (!record.emailVerified) redirect("/verification");
   await startSession(await signInAs(session.userId));
-  // La page joue son animation de réussite, puis va à cette adresse.
-  return { ok: true, message: await afterSignIn() };
+  redirect(await afterSignIn());
 }
 
 export async function resendVerification(): Promise<FormState> {

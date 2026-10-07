@@ -13,6 +13,8 @@ export const en: Dictionary = {
     how: "How it works",
     pricing: "Pricing",
     faq: "Questions",
+    templates: "Templates",
+    login: "Log in",
     cta: "Create my menu",
     openMenu: "Open the menu",
     menuTitle: "Menu",
@@ -144,7 +146,7 @@ export const en: Dictionary = {
           "One QR code per table or per room",
           "Ordering from the table",
           "Live order screen at the counter",
-          "Guest reviews and loyalty card",
+          "Guest reviews after their order",
           "Your sales, dish by dish",
         ],
       },
@@ -228,6 +230,25 @@ export const en: Dictionary = {
     whatsappMessage: "Hello, I have a question about Yéboué Tech.",
   },
 
+  templates: {
+    eyebrow: "Ten templates",
+    title: "Your menu, in the style of your house.",
+    intro:
+      "From the chalkboard of a maquis to a hotel directory: ten layouts, each in your own colour. Switch whenever you like, your menu follows.",
+    see: "Try this template",
+    descriptions: {
+      braise: "Large photo cards under a generous cover.",
+      ardoise: "The maquis chalkboard, written by hand.",
+      "table-dhote": "The classic menu, on ivory paper.",
+      comptoir: "Night-time mood, cocktails writ large.",
+      palace: "Quiet and refined, services in panels.",
+      magazine: "An editorial layout, with big headlines.",
+      epure: "Almost nothing: a clean, very fast list.",
+      marche: "Blocks of colour and price tags.",
+      carnet: "The till receipt, fresh from the printer.",
+      vitrine: "Dishes in full screen, to swipe through.",
+    },
+  },
   solutionPage: {
     storyEyebrow: "How it works",
     benefitsEyebrow: "What you gain",
@@ -235,7 +256,6 @@ export const en: Dictionary = {
     pricingLink: "See pricing",
   },
 
-  signupMessage: "Hello, I would like to create the menu for my venue.",
 
   solutions: {
     restaurants: {

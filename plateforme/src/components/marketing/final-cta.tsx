@@ -1,7 +1,7 @@
 import { LogoMark } from "@/components/brand/logo";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { site, whatsappUrl } from "@/config/site";
+import { SIGNUP_PATH, site } from "@/config/site";
 import type { Dictionary } from "@/i18n";
 import { cn } from "@/lib/utils/cn";
 
@@ -23,7 +23,7 @@ export function FinalCta({ dict }: { dict: Dictionary }) {
           {dict.cta.text}
         </p>
         <div data-reveal className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <a href={whatsappUrl(dict.signupMessage)} className={buttonStyles({ size: "lg" })}>
+          <a href={SIGNUP_PATH} className={buttonStyles({ size: "lg" })}>
             {dict.cta.primary}
           </a>
           <a

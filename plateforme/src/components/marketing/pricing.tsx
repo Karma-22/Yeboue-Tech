@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Check } from "lucide-react";
 import { buttonStyles } from "@/components/ui/button";
 import { PLANS, TRIAL, type Plan } from "@/config/plans";
-import { whatsappUrl } from "@/config/site";
+import { SIGNUP_PATH } from "@/config/site";
 import type { Dictionary } from "@/i18n";
 import { cn } from "@/lib/utils/cn";
 import { formatPrice } from "@/lib/utils/format";
@@ -17,7 +17,7 @@ const SETUP_PRICE = 85_000;
 
 export function Pricing({ dict }: { dict: Dictionary }) {
   const copy = dict.pricing;
-  const signup = whatsappUrl(dict.signupMessage);
+  const signup = SIGNUP_PATH;
   const servicePhotos = [setup, photographer];
   const servicePrices = [`${formatPrice(SETUP_PRICE)}, ${copy.once}`, copy.onQuote];
 

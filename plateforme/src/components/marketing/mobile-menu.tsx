@@ -16,6 +16,7 @@ interface MobileMenuProps {
   links: MenuLink[];
   solutions: MenuLink[];
   cta: MenuLink;
+  login: MenuLink;
   labels: {
     open: string;
     title: string;
@@ -29,7 +30,7 @@ interface MobileMenuProps {
 }
 
 /** Le menu du site sur téléphone : il monte du bas de l'écran, à portée de pouce. */
-export function MobileMenu({ links, solutions, cta, labels }: MobileMenuProps) {
+export function MobileMenu({ links, solutions, cta, login, labels }: MobileMenuProps) {
   return (
     <Dialog>
       <DialogTrigger
@@ -86,9 +87,14 @@ export function MobileMenu({ links, solutions, cta, labels }: MobileMenuProps) {
           </span>
         </div>
 
-        <a href={cta.href} className={buttonStyles({ size: "lg", block: true })}>
-          {cta.label}
-        </a>
+        <div className="grid gap-2">
+          <a href={cta.href} className={buttonStyles({ size: "lg", block: true })}>
+            {cta.label}
+          </a>
+          <Link href={login.href} className={buttonStyles({ variant: "outline", size: "lg", block: true })}>
+            {login.label}
+          </Link>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CircleCheck } from "lucide-react";
 import { CopyButton, PublishSwitch } from "@/components/dashboard/controls";
-import { PageHeader, Section } from "@/components/dashboard/page-header";
+import { PageHeader, Section, StatTile } from "@/components/dashboard/page-header";
 import { QrDownloads, QrImage } from "@/components/dashboard/qr-card";
 import { Badge } from "@/components/ui/badge";
 import { isLocalSite, publicUrl, siteHost } from "@/config/site";
@@ -81,10 +81,7 @@ export default async function OverviewPage({ params, searchParams }: PageProps<"
             { label: "Commandes aujourd'hui", value: String(today.orders + today.whatsappOrders) },
             { label: "Ventes sur place", value: formatPrice(today.revenue) },
           ].map((figure) => (
-            <div key={figure.label} className="rounded-lg border border-line bg-surface-raised p-5">
-              <p className="text-sm text-fg-muted">{figure.label}</p>
-              <p className="mt-1 font-display text-3xl font-bold tabular-nums">{figure.value}</p>
-            </div>
+            <StatTile key={figure.label} {...figure} />
           ))}
         </div>
 

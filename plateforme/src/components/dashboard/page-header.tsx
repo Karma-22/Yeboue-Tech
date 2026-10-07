@@ -77,3 +77,14 @@ export function AccountBar({ admin = false }: { admin?: boolean }) {
     </div>
   );
 }
+
+/** Un chiffre clé : ce qu'il compte, puis sa valeur. Pour une valeur seule, pas de graphique. */
+export function StatTile({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <div className="rounded-lg border border-line bg-surface-raised p-5">
+      <p className="text-sm text-fg-muted">{label}</p>
+      <p className="mt-1 text-3xl leading-tight font-semibold tracking-[-0.01em]">{value}</p>
+      {hint && <p className="mt-1 text-xs text-fg-subtle">{hint}</p>}
+    </div>
+  );
+}

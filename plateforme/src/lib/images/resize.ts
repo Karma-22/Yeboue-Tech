@@ -49,7 +49,8 @@ export async function uploadPhoto(
 ): Promise<UploadedPhoto> {
   if (!file.type.startsWith("image/")) throw new Error("Choisissez une image.");
   const [thumb, large] = await Promise.all([
-    resizeImage(file, kind === "logo" ? 256 : THUMB_WIDTH),
+    // La vignette est vue en petit, dans une liste : un peu plus de compression ne se remarque pas.
+    resizeImage(file, kind === "logo" ? 256 : THUMB_WIDTH, 0.72),
     resizeImage(file, kind === "logo" ? 512 : LARGE_WIDTH),
   ]);
   const body = new FormData();

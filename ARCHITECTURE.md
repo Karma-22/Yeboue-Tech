@@ -137,12 +137,14 @@ Pour l'instant, la page d'accueil réunit tout : ses sections se rejoignent par 
 | Adresse | Contenu |
 |---|---|
 | `/app` | Liste de mes établissements, ou redirection s'il n'y en a qu'un |
-| `/app/nouveau` | Création guidée d'un établissement |
+| `/app/nouveau` | Création guidée, premier écran : l'établissement |
+| `/app/{id}/creation` | Création guidée, écrans 2 à 4 : l'apparence, la carte, l'offre |
 | `/app/compte` | Mon profil |
 | `/app/{id}` | Accueil : état de l'abonnement, chiffres du jour, raccourcis |
 | `/app/{id}/menu` | Catégories et articles |
 | `/app/{id}/commandes` | Écran de commandes en direct |
 | `/app/{id}/tables` | Zones, tables, QR Codes |
+| `/app/{id}/planche` | Tous les QR Codes sur une planche à imprimer |
 | `/app/{id}/apparence` | Modèle, couleur, logo, couverture |
 | `/app/{id}/informations` | Nom, adresse, horaires, contacts |
 | `/app/{id}/statistiques` | Chiffres |
@@ -165,6 +167,7 @@ Pour l'instant, la page d'accueil réunit tout : ses sections se rejoignent par 
 | `/{slug}` | Page de l'établissement |
 | `/{slug}/t/{numero}` | La même, rattachée à une table |
 | `/{slug}/commande/{id}` | Suivi d'une commande |
+| `/apercu/{modèle}` | Un modèle de page, avec un établissement d'exemple ; la couleur se change dans le bandeau |
 
 ### Page interne
 | Adresse | Contenu |
@@ -454,7 +457,7 @@ On n'avance que dans le sens des flèches ; le serveur refuse tout autre changem
 | Page d'établissement rendue par le serveur et **mise en cache par établissement** | Mille scans ne coûtent qu'une lecture de la base |
 | Cache vidé à chaque modification du menu | Le client voit toujours la bonne version |
 | Photos en WebP, deux tailles, chargées quand elles approchent de l'écran | Page utilisable en 3G |
-| Aucune animation lourde sur la page d'établissement | GSAP n'est chargé que sur le site vitrine |
+| Animations chargées après l'affichage | Sur la page d'établissement, la carte se lit d'abord ; GSAP n'est téléchargé qu'ensuite, et rien n'est caché en l'attendant. Le modèle Épure n'en charge aucune. |
 | Statistiques par incrément dans un document par jour | Lecture des chiffres en une seule requête |
 | Écoute en direct limitée aux commandes du jour | Peu de lectures |
 | Alerte de budget Firebase | Aucune mauvaise surprise |
@@ -466,7 +469,7 @@ Objectif : moins de 150 Ko hors photos pour la page d'établissement.
 ## 12. Sécurité
 
 ### Principe
-**Toute écriture passe par le serveur.** Le navigateur ne modifie jamais Firestore directement, à une exception près : l'envoi des photos vers Storage.
+**Toute écriture passe par le serveur.** Le navigateur ne modifie jamais Firestore ni Storage directement.
 
 ### Règles Firestore
 | Donnée | Lecture directe par le navigateur | Écriture directe |
@@ -478,7 +481,7 @@ Objectif : moins de 150 Ko hors photos pour la page d'établissement.
 Le navigateur n'a besoin d'un accès direct que pour le temps réel des commandes. Tout le reste est lu et écrit par le serveur, qui contrôle les droits.
 
 ### Règles Storage
-Envoi autorisé seulement aux membres `owner` ou `manager` de l'établissement, uniquement pour des images, avec une taille maximale.
+Storage est fermé au navigateur, en lecture comme en écriture. L'envoi passe par le serveur (`/api/upload`), qui vérifie la session, le rôle, le type et la taille du fichier ; la lecture passe par lui aussi (`/api/photo/…`), avec une mise en cache d'un an puisqu'un fichier ne change jamais.
 
 ### Contrôles côté serveur, à chaque action
 1. La session est-elle valide ?
@@ -527,10 +530,12 @@ src/
     [slug]/                 page d'établissement
       t/[number]/
       commande/[orderId]/
+    apercu/[template]/      aperçu d'un modèle, sans compte
     api/
-      orders/               création de commande
       scan/                 comptage des scans
-      qr/                   QR en SVG et planches PDF
+      upload/               envoi d'une photo
+      photo/                lecture d'une photo
+      dev/seed/             établissement de démonstration (émulateurs seulement)
       payments/webhook/     notifications de paiement (plus tard)
     charte/                 charte d'interface (développement seulement)
     globals.css             la charte : couleurs, rayons, ombres, styles de texte
@@ -541,8 +546,9 @@ src/
     ui/                     boutons, champs, fenêtres (base Radix, restylée)
     marketing/              sections du site vitrine, téléphone dessiné et son animation (GSAP)
     dashboard/              éléments du tableau de bord
-    public/                 panier, fiche article, suivi de commande
-  templates/                modèles de page + registre
+    admin/                  éléments de l'administration
+    public/                 panier, fiche article, suivi de commande, pièces communes aux modèles
+  templates/                les dix modèles de page, leur registre, les établissements d'exemple
   i18n/                     les langues du site vitrine : textes français et anglais, adresses par langue
   lib/
     firebase/               connexion à Firebase (navigateur et serveur)
@@ -553,6 +559,7 @@ src/
     orders/                 règles du cycle de commande
     qr/                     dessin des QR et des planches
     images/                 réduction et conversion des photos
+    public/                 ce que la page d'un établissement montre à ses clients
     validation/             schémas Zod
     utils/                  petits outils : classes CSS, écriture des prix
   config/
@@ -561,8 +568,8 @@ src/
     site.ts                 nom, domaine, contacts
 scripts/
   emulators.mjs             lance Firebase en local
-  set-super-admin.ts        attribue la marque super-administrateur
-  seed-demo.ts              crée l'établissement de démonstration
+  set-super-admin.mjs       attribue la marque super-administrateur (npm run admin)
+  demo.mjs                  crée l'établissement de démonstration en local (npm run demo)
 firestore.rules
 storage.rules
 ```
@@ -596,20 +603,22 @@ En local, le projet s'appelle `demo-yeboue-tech` : un identifiant qui commence p
 
 ## 16. Ordre de construction
 
-| Étape | Ce qui est construit | Sections concernées |
-|---|---|---|
-| **0** | Projet, Firebase et émulateur, charte, polices, logo, composants de base | 14, 15 |
-| **2a** | Page d'accueil du site vitrine : photos, vidéo, animation du téléphone, tarifs, questions | 4 |
-| **1a** | Comptes : inscription, vérification par code, e-mail HTML provisoire, connexion, session, profil | 3 |
-| **1b** | Création guidée d'un établissement, identifiant d'adresse | 5, 6.1 |
-| **1c** | Éditeur de menu, photos | 6.2, 6.3 |
-| **1d** | Page d'établissement, trois modèles, cache | 10, 11 |
-| **1e** | QR général à télécharger | 6.4 |
-| **2b** | Reste du site vitrine : pages Tarifs, Fonctionnement, Contact, pages légales, établissement de démonstration | 4 |
-| **3** | Administration, abonnements, paiements manuels, fin d'essai | 6.9, 6.10, 7, 8 |
-| **4** | Tables, QR par table, panier, commande, écran de commandes, WhatsApp | 6.4 à 6.7, 9 |
-| **5** | Équipe et rôles, avis, fidélité, statistiques | 2, 6.8 |
-| **6** | Hôtel, modèles supplémentaires, GeniusPay, supports imprimés | 13 |
+| Étape | Ce qui est construit | Sections concernées | État au 7 octobre 2026 |
+|---|---|---|---|
+| **0** | Projet, Firebase et émulateur, charte, polices, logo, composants de base | 14, 15 | Fait |
+| **2a** | Page d'accueil du site vitrine : photos, vidéo, animation du téléphone, tarifs, questions | 4 | Fait, avec la galerie des dix modèles |
+| **1a** | Comptes : inscription, vérification par code, e-mail HTML provisoire, connexion, session, profil | 3 | Fait. Reste : brancher le service d'e-mail, poser la maquette définitive de l'e-mail |
+| **1b** | Création guidée d'un établissement, identifiant d'adresse | 5, 6.1 | Fait |
+| **1c** | Éditeur de menu, photos | 6.2, 6.3 | Fait |
+| **1d** | Page d'établissement, dix modèles, cache | 10, 11 | Fait |
+| **1e** | QR général à télécharger | 6.4 | Fait (PNG et SVG) |
+| **2b** | Reste du site vitrine : pages Tarifs, Fonctionnement, Contact, pages légales, établissement de démonstration | 4 | **À faire.** L'accueil réunit déjà tarifs, fonctionnement et questions ; l'établissement de démonstration existe en local (`npm run demo`). Les pages légales attendent le statut de l'entreprise |
+| **3** | Administration, abonnements, paiements manuels, fin d'essai | 6.9, 6.10, 7, 8 | Fait |
+| **4** | Tables, QR par table, panier, commande, écran de commandes, WhatsApp | 6.4 à 6.7, 9 | Fait |
+| **5** | Équipe et rôles, avis, fidélité, statistiques | 2, 6.8 | Fait, **sauf la carte de fidélité** |
+| **6** | Hôtel, modèles supplémentaires, GeniusPay, supports imprimés | 13 | Hôtels et résidences : fait (lignes sans prix, modèle Palace). Planche de QR Codes : faite. **À faire :** GeniusPay, affiche A5 |
+
+Ce qui reste hors du code, et qui bloque la mise en ligne : le nom de domaine, le vrai projet Firebase, le service d'e-mail, le statut de l'entreprise.
 
 Chaque étape se termine par une version qui fonctionne et que tu peux essayer.
 
@@ -632,6 +641,11 @@ Décidés pendant la construction du produit complet. Là où ils contredisent u
 | **Planches de QR Codes** | Une page prête à imprimer (ou à enregistrer en PDF depuis le navigateur) au lieu d'un fichier PDF fabriqué par le serveur. |
 | **Lignes sans prix** | Un article peut ne pas avoir de prix et porter une mention (« Gratuit », « Inclus ») : c'est ce qui sert aux hôtels et aux résidences. |
 | **Boutons « Créer mon menu »** | Ils mènent à `/inscription`. |
+| **Lecture des photos** | Les photos ne sont pas lues directement dans Storage : le serveur les sert à l'adresse `/api/photo/…`. Les règles Storage restent donc entièrement fermées. |
+| **Suivi de commande** | Le client et le personnel écoutent Firestore en direct ; c'est la seule lecture que les règles ouvrent au navigateur. Le personnel y accède avec un jeton remis par le serveur, gardé en mémoire le temps de l'onglet. |
+| **Administration** | Le super-administrateur peut ouvrir le tableau de bord de n'importe quel établissement, avec les droits du propriétaire ; chaque ouverture est inscrite au journal. Il peut aussi offrir des jours d'essai. |
+| **Fidélité** | La carte de fidélité par numéro de téléphone n'est pas construite. Le site vitrine ne l'annonce donc plus : la ligne de l'offre « Menu + Commande » dit « Avis des clients après leur commande ». Le tableau de la section 7 la garde comme objectif. |
+| **Vérification de l'e-mail** | Elle se fait en deux temps : le serveur vérifie le code, la page joue son animation, puis une seconde action ouvre la session vérifiée et envoie la personne là où elle allait (son invitation, ou le tableau de bord). |
 
 ## Lexique
 

@@ -17,6 +17,7 @@ const RESERVED = [
   "inscription",
   "verification",
   "connexion",
+  "deconnexion",
   "mot-de-passe-oublie",
   "invitation",
   "apercu",

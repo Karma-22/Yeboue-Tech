@@ -140,10 +140,13 @@ export function OrderTracker({
           >
             <Icon aria-hidden="true" strokeWidth={2.25} className="size-9" />
           </div>
-          <h1 key={title} role="status" className="type-display-3 mt-6 animate-rise">
-            {title}
-          </h1>
-          <p className="mt-2 text-fg-muted">{failed && order.rejectReason ? order.rejectReason : subtitle}</p>
+          {/* L'état est annoncé aux lecteurs d'écran quand il change ; le titre reste un titre. */}
+          <div role="status">
+            <h1 key={title} className="type-display-3 mt-6 animate-rise">
+              {title}
+            </h1>
+            <p className="mt-2 text-fg-muted">{failed && order.rejectReason ? order.rejectReason : subtitle}</p>
+          </div>
           {!failed && order.status !== "served" && (
             <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-signal-text">
               <span className="size-2 animate-live rounded-full bg-current" />

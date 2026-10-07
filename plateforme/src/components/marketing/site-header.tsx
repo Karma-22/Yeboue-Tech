@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { whatsappUrl } from "@/config/site";
+import { SIGNUP_PATH } from "@/config/site";
 import { localePath, SOLUTION_IDS, type Dictionary, type Locale } from "@/i18n";
 import { LocaleSwitch } from "./locale-switch";
 import { MobileMenu } from "./mobile-menu";
@@ -13,6 +13,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
   const links = [
     { href: `${home}#pour-qui`, label: dict.nav.audiences },
     { href: `${home}#fonctionnement`, label: dict.nav.how },
+    { href: `${home}#modeles`, label: dict.nav.templates },
     { href: `${home}#tarifs`, label: dict.nav.pricing },
     { href: `${home}#questions`, label: dict.nav.faq },
   ];
@@ -20,7 +21,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
     href: localePath(locale, `/solutions/${id}`),
     label: dict.solutions[id].name,
   }));
-  const cta = { href: whatsappUrl(dict.signupMessage), label: dict.nav.cta };
+  const cta = { href: SIGNUP_PATH, label: dict.nav.cta };
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-surface">
@@ -47,6 +48,9 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             className="hidden px-2 text-sm text-fg-muted md:block"
           />
           <ThemeToggle toDark={dict.nav.toDark} toLight={dict.nav.toLight} className="hidden md:grid" />
+          <Link href="/connexion" className="hidden h-9 items-center rounded-sm px-2.5 text-sm font-semibold text-fg-muted transition-colors hover:text-fg sm:flex">
+            {dict.nav.login}
+          </Link>
           <a href={cta.href} className={buttonStyles({ size: "sm" })}>
             {cta.label}
           </a>
@@ -54,6 +58,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             links={links}
             solutions={solutions}
             cta={cta}
+            login={{ href: "/connexion", label: dict.nav.login }}
             labels={{
               open: dict.nav.openMenu,
               title: dict.nav.menuTitle,

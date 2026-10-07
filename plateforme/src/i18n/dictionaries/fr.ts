@@ -17,6 +17,8 @@ const texts: Dictionary = {
     how: "Comment ça marche",
     pricing: "Tarifs",
     faq: "Questions",
+    templates: "Modèles",
+    login: "Connexion",
     cta: "Créer mon menu",
     openMenu: "Ouvrir le menu",
     menuTitle: "Menu",
@@ -148,7 +150,7 @@ const texts: Dictionary = {
           "Un QR Code par table ou par chambre",
           "Commande depuis la table",
           "Écran de commandes en direct au comptoir",
-          "Avis des clients et carte de fidélité",
+          "Avis des clients après leur commande",
           "Vos ventes, plat par plat",
         ],
       },
@@ -232,6 +234,25 @@ const texts: Dictionary = {
     whatsappMessage: "Bonjour, j'ai une question sur Yéboué Tech.",
   },
 
+  templates: {
+    eyebrow: "Dix modèles",
+    title: "Votre carte, dans le style de votre maison.",
+    intro:
+      "Du tableau noir du maquis à la carte d'hôtel : dix mises en page, chacune à vos couleurs. Vous en changez quand vous voulez, votre carte suit.",
+    see: "Essayer ce modèle",
+    descriptions: {
+      braise: "De grandes photos en cartes, sous une couverture généreuse.",
+      ardoise: "Le tableau noir du maquis, écrit à la craie.",
+      "table-dhote": "La carte classique, sur papier ivoire.",
+      comptoir: "L'ambiance de la nuit, les cocktails en grand.",
+      palace: "Sobre et raffiné, les services en volets.",
+      magazine: "Une mise en page de revue, en grands titres.",
+      epure: "Presque rien : une liste nette, très rapide.",
+      marche: "Des aplats de couleur, des étiquettes de prix.",
+      carnet: "Le ticket de caisse, qui sort de l'imprimante.",
+      vitrine: "Les plats en plein écran, à feuilleter.",
+    },
+  },
   solutionPage: {
     storyEyebrow: "Comment ça marche",
     benefitsEyebrow: "Ce que vous y gagnez",
@@ -239,7 +260,6 @@ const texts: Dictionary = {
     pricingLink: "Voir les tarifs",
   },
 
-  signupMessage: "Bonjour, je souhaite créer le menu de mon établissement.",
 
   solutions: {
     restaurants: {

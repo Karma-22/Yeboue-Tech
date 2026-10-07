@@ -81,6 +81,7 @@ export function NewEstablishmentForm({ phone, siteHost }: { phone: string; siteH
                   alt=""
                   fill
                   sizes="(min-width: 640px) 9rem, 45vw"
+                  placeholder="blur"
                   className={cn("object-cover transition-[scale,filter] duration-500", !selected && "brightness-75 saturate-50")}
                 />
                 <span className="absolute inset-0 bg-linear-to-t from-black/75 to-transparent" />

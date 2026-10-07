@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getEstablishment, getMember } from "@/lib/db/establishments";
 import type { Establishment, Member, UserProfile } from "@/lib/db/types";
-import { getUser } from "@/lib/db/users";
+import { createUser, getUser } from "@/lib/db/users";
 import { adminAuth } from "@/lib/firebase/admin";
 import { can, type Action } from "./permissions";
 
@@ -56,8 +56,33 @@ export const getSession = cache(async (): Promise<Session | null> => {
 
 export const getCurrentUser = cache(async (): Promise<UserProfile | null> => {
   const session = await getSession();
-  return session ? getUser(session.userId) : null;
+  if (!session) return null;
+  return (await getUser(session.userId)) ?? restoreProfile(session);
 });
+
+/**
+ * Le compte existe, mais pas sa fiche : l'inscription a été coupée entre les
+ * deux. On la reconstruit à partir du compte, plutôt que de bloquer la personne.
+ */
+async function restoreProfile(session: Session): Promise<UserProfile | null> {
+  try {
+    const record = await adminAuth().getUser(session.userId);
+    const [firstName = "", ...rest] = (record.displayName ?? "").trim().split(/s+/);
+    const profile: UserProfile = {
+      id: record.uid,
+      firstName,
+      lastName: rest.join(" "),
+      email: record.email ?? session.email,
+      phone: "",
+      establishmentIds: [],
+      createdAt: Date.now(),
+    };
+    await createUser(profile);
+    return profile;
+  } catch {
+    return null;
+  }
+}
 
 /** Exige une personne connectée dont l'e-mail est vérifié ; sinon renvoie vers la bonne page. */
 export async function requireUser(): Promise<{ session: Session; user: UserProfile }> {
@@ -65,7 +90,8 @@ export async function requireUser(): Promise<{ session: Session; user: UserProfi
   if (!session) redirect("/connexion");
   if (!session.emailVerified) redirect("/verification");
   const user = await getCurrentUser();
-  if (!user) redirect("/connexion");
+  // Un compte supprimé garde un cookie valable : on le ferme, sinon la connexion renverrait ici sans fin.
+  if (!user) redirect("/deconnexion");
   return { session, user };
 }
 

@@ -25,6 +25,8 @@ export function PhotoInput({ establishmentId, kind, value, onChange, label, clas
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // La photo choisie s'affiche tout de suite, depuis l'appareil, sans attendre le serveur.
+  const [local, setLocal] = useState<string | null>(null);
 
   const pick = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -32,9 +34,11 @@ export function PhotoInput({ establishmentId, kind, value, onChange, label, clas
     if (!file) return;
     setBusy(true);
     setError(null);
+    setLocal(URL.createObjectURL(file));
     try {
       onChange(await uploadPhoto(file, establishmentId, kind));
     } catch (cause) {
+      setLocal(null);
       setError(cause instanceof Error ? cause.message : "L'image n'a pas pu être envoyée.");
     } finally {
       setBusy(false);
@@ -50,9 +54,9 @@ export function PhotoInput({ establishmentId, kind, value, onChange, label, clas
           kind === "logo" ? "size-24 rounded-full" : "aspect-[16/10] w-full",
         )}
       >
-        {value ? (
+        {local || value ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={value.thumb} alt="" className="absolute inset-0 size-full object-cover" />
+          <img src={local ?? value?.thumb} alt="" className="absolute inset-0 size-full object-cover" />
         ) : (
           <ImagePlus aria-hidden="true" className="size-7" />
         )}
@@ -74,7 +78,10 @@ export function PhotoInput({ establishmentId, kind, value, onChange, label, clas
         {value && (
           <button
             type="button"
-            onClick={() => onChange(null)}
+            onClick={() => {
+              setLocal(null);
+              onChange(null);
+            }}
             disabled={busy}
             aria-label="Retirer la photo"
             className="grid size-9 place-items-center rounded-sm text-fg-muted hover:bg-fg/7 hover:text-danger-text"

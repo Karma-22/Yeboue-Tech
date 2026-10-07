@@ -16,3 +16,22 @@ export function formatPrice(amount: number, unit: "F" | "FCFA" = "F"): string {
   const sign = rounded < 0 ? MINUS : "";
   return `${sign}${digits}${NO_BREAK_SPACE}${unit}`;
 }
+
+const DATE = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const DATE_TIME = new Intl.DateTimeFormat("fr-FR", {
+  day: "numeric",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "UTC",
+});
+
+/** Écrit une date à la française : « 6 octobre 2026 ». Abidjan est à l'heure universelle toute l'année. */
+export function formatDate(timestamp: number): string {
+  return DATE.format(timestamp);
+}
+
+/** Une date avec son heure, en court : « 6 oct., 14:05 ». */
+export function formatDateTime(timestamp: number): string {
+  return DATE_TIME.format(timestamp);
+}

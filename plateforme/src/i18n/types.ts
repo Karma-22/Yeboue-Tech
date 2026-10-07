@@ -1,3 +1,4 @@
+import type { TemplateId } from "@/config/templates";
 import type { SolutionId } from "./config";
 
 /* La forme des textes du site vitrine. Chaque langue fournit exactement ces champs. */
@@ -57,6 +58,8 @@ export interface Dictionary {
     how: string;
     pricing: string;
     faq: string;
+    templates: string;
+    login: string;
     cta: string;
     openMenu: string;
     menuTitle: string;
@@ -126,7 +129,14 @@ export interface Dictionary {
     credits: string;
     whatsappMessage: string;
   };
+  templates: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    see: string;
+    /** Ce qui distingue chaque modèle, en une phrase. */
+    descriptions: Record<TemplateId, string>;
+  };
   solutionPage: { benefitsEyebrow: string; storyEyebrow: string; othersTitle: string; pricingLink: string };
-  signupMessage: string;
   solutions: Record<SolutionId, SolutionCopy>;
 }

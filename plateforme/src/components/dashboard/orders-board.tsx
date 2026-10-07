@@ -198,7 +198,7 @@ export function OrdersBoard({ establishmentId, initial, since: start }: OrdersBo
                     <Button variant="outline" disabled={pending} onClick={() => setRejecting(order)}>
                       Refuser
                     </Button>
-                    <Button block disabled={pending} onClick={() => advance(order, "accepted")}>
+                    <Button className="flex-1" disabled={pending} onClick={() => advance(order, "accepted")}>
                       Accepter
                     </Button>
                   </>
@@ -208,13 +208,13 @@ export function OrdersBoard({ establishmentId, initial, since: start }: OrdersBo
                     <Button variant="outline" disabled={pending} onClick={() => advance(order, "cancelled")}>
                       Annuler
                     </Button>
-                    <Button variant="secondary" block disabled={pending} onClick={() => advance(order, "ready")}>
+                    <Button variant="secondary" className="flex-1" disabled={pending} onClick={() => advance(order, "ready")}>
                       Prête
                     </Button>
                   </>
                 )}
                 {order.status === "ready" && (
-                  <Button variant="secondary" block disabled={pending} onClick={() => advance(order, "served")}>
+                  <Button variant="secondary" className="flex-1" disabled={pending} onClick={() => advance(order, "served")}>
                     Servie
                   </Button>
                 )}

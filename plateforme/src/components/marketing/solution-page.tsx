@@ -11,7 +11,7 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 import { SOLUTION_MEDIA } from "@/components/marketing/solution-media";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { whatsappUrl } from "@/config/site";
+import { SIGNUP_PATH } from "@/config/site";
 import { getDictionary, localePath, type Locale, type SolutionId } from "@/i18n";
 
 /** La page d'un type d'établissement : ce que la plateforme fait chez lui, pas à pas. */
@@ -33,7 +33,7 @@ export function SolutionPage({ locale, id }: { locale: Locale; id: SolutionId })
               {copy.intro}
             </p>
             <div className="mt-9 flex animate-rise flex-wrap items-center gap-3 [animation-delay:240ms]">
-              <a href={whatsappUrl(dict.signupMessage)} className={buttonStyles({ size: "lg" })}>
+              <a href={SIGNUP_PATH} className={buttonStyles({ size: "lg" })}>
                 {dict.hero.primary}
               </a>
               <a href="#fonctionnement" className={buttonStyles({ variant: "ghost", size: "lg" })}>

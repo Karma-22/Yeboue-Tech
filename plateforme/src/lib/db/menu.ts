@@ -2,7 +2,7 @@ import "server-only";
 
 import type { CollectionReference } from "firebase-admin/firestore";
 import { db, many, one } from "./core";
-import type { Category, Item } from "./types";
+import type { Category, Item, ItemPhoto } from "./types";
 
 const establishment = (id: string) => db().collection("establishments").doc(id);
 const categories = (establishmentId: string) => establishment(establishmentId).collection("categories");
@@ -113,7 +113,10 @@ export async function moveItem(establishmentId: string, itemId: string, directio
 /** Remplit une carte vide avec des catégories et des articles d'exemple, à modifier ensuite. */
 export async function seedMenu(
   establishmentId: string,
-  sample: { category: string; items: { name: string; description: string; price: number | null; note?: string }[] }[],
+  sample: {
+    category: string;
+    items: { name: string; description: string; price: number | null; note?: string; photo?: ItemPhoto | null; available?: boolean }[];
+  }[],
 ): Promise<void> {
   const batch = db().batch();
   let position = Date.now();
@@ -129,8 +132,8 @@ export async function seedMenu(
         descriptionEn: "",
         price: entry.price,
         note: entry.note ?? "",
-        photo: null,
-        available: true,
+        photo: entry.photo ?? null,
+        available: entry.available ?? true,
         position: (position += 1),
       };
       batch.set(items(establishmentId).doc(), data);

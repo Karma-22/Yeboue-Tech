@@ -11,9 +11,10 @@ import { Pricing } from "@/components/marketing/pricing";
 import { ScrollReveal } from "@/components/marketing/scroll-reveal";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { SOLUTION_MEDIA } from "@/components/marketing/solution-media";
+import { TemplateGallery } from "@/components/marketing/template-gallery";
 import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import { Container } from "@/components/ui/container";
-import { whatsappUrl } from "@/config/site";
+import { SIGNUP_PATH } from "@/config/site";
 import { getDictionary, localePath, type Dictionary, type Locale, type SolutionId } from "@/i18n";
 import { cn } from "@/lib/utils/cn";
 import { formatPrice } from "@/lib/utils/format";
@@ -61,7 +62,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         titleRest={dict.hero.titleRest}
         text={dict.hero.text}
         assurances={dict.hero.assurances}
-        primary={{ href: whatsappUrl(dict.signupMessage), label: dict.hero.primary }}
+        primary={{ href: SIGNUP_PATH, label: dict.hero.primary }}
         secondary={{ href: "#fonctionnement", label: dict.hero.secondary }}
         photo={
           <div className="relative aspect-4/5 overflow-hidden rounded-xl sm:aspect-4/3 lg:aspect-4/5">
@@ -168,6 +169,16 @@ export function HomePage({ locale }: { locale: Locale }) {
               <p className="type-display-2 max-w-2xl">{dict.video.title}</p>
               <p className="type-lead mt-4 max-w-xl text-fg-muted">{dict.video.text}</p>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ——— Les dix modèles ——— */}
+      <section id="modeles" className="scroll-mt-16 overflow-x-clip border-t border-line">
+        <Container className="py-20 sm:py-28">
+          <SectionHeading eyebrow={dict.templates.eyebrow} title={dict.templates.title} intro={dict.templates.intro} />
+          <div className="mt-12">
+            <TemplateGallery dict={dict} />
           </div>
         </Container>
       </section>

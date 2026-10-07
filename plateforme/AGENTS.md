@@ -12,6 +12,11 @@ Le plan de construction est `../ARCHITECTURE.md`. Le lire avant de coder, le sui
 - **Téléphone d'abord** : cibles tactiles de 44 px au minimum, texte de 16 px dans les champs.
 - **Prix et limites des offres** : uniquement dans `src/config/plans.ts`.
 - **Nouvelle page à la racine du site** : ajouter son nom dans `src/config/reserved-slugs.ts` (un test le vérifie).
+- **Modèles de page** : un fichier par modèle dans `src/templates`, inscrit dans `registry.ts`. Un modèle ne lit jamais la base : il reçoit `TemplateData` et dessine. Sa couleur vient des variables `--brand`, `--on-brand`, `--brand-text`, `--brand-text-dark`, `--brand-soft`, `--brand-deep` (`src/lib/utils/color.ts`), jamais d'une couleur en dur. Le panier, la fiche d'un article et la rangée des catégories sont communs (`src/components/public`). Après une retouche, refaire sa vignette dans `public/modeles`.
+- **Constantes et composants client** : une page du serveur ne peut pas lire une constante exportée par un fichier « use client » (elle reçoit une référence vide). Les textes et réglages partagés vivent dans un fichier à part, comme `src/components/public/shell-labels.ts`.
+- **Après chaque modification d'un établissement** : vider le cache de sa page avec `updateTag(pageTag(slug))`, puis `refresh()` pour le tableau de bord. Les actions de `src/app/app/[estId]/actions.ts` le font par `publish()`.
+- **Graphiques** : suivre le skill `dataviz` (couleur vérifiée par son script, survol, clavier, tableau des chiffres). Le composant existant est `src/components/dashboard/bar-chart.tsx`, sa couleur est le jeton `chart`.
+- **Animations des pages d'établissement** : rien n'est caché par le CSS ; GSAP est chargé après l'affichage par `TemplateMotion`, à partir d'attributs `data-reveal`, `data-parallax`, `data-draw`. Le haut de page s'anime en CSS (`animate-rise`, `animate-kenburns`…).
 - Avant de rendre la main : `npm run lint`, `npm test`, `npm run build` ; et `npm run test:emulators` dès que Firebase ou ses règles de sécurité sont touchés.
 - La machine de développement est lente (8 Go de RAM) : ne pas lancer en même temps le serveur, les émulateurs et les tests.
 

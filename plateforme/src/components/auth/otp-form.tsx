@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { resendVerification, verifyEmail } from "@/app/(auth)/actions";
+import { finishVerification, resendVerification, verifyEmail } from "@/app/(auth)/actions";
 import { LogoMark } from "@/components/brand/logo";
 import { cn } from "@/lib/utils/cn";
 
@@ -30,6 +30,7 @@ export function OtpForm() {
   const [seconds, setSeconds] = useState(RESEND_SECONDS);
   const [checking, startCheck] = useTransition();
   const [resending, startResend] = useTransition();
+  const [, startFinish] = useTransition();
   const root = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const boxes = useRef<HTMLDivElement>(null);
@@ -60,11 +61,12 @@ export function OtpForm() {
     })();
   };
 
-  const celebrate = (destination: string) => {
+  const celebrate = () => {
     contextSafe(() => {
       const cells = boxes.current ? Array.from(boxes.current.children) : [];
       gsap
-        .timeline({ onComplete: () => router.replace(destination) })
+        // L'animation jouée, le serveur ouvre la session vérifiée et envoie à la bonne page.
+        .timeline({ onComplete: () => startFinish(() => finishVerification()) })
         // La couleur de réussite vient des classes (voir `done`) ; ici, seulement le mouvement.
         .to(cells, { y: -6, duration: 0.22, stagger: 0.07, ease: "power2.out" })
         .to(cells, { y: 0, duration: 0.3, stagger: 0.07, ease: "bounce.out" }, "<0.12")
@@ -84,10 +86,10 @@ export function OtpForm() {
       const data = new FormData();
       data.set("code", value);
       const result = await verifyEmail({}, data);
-      if (result.ok && result.message) {
+      if (result.ok) {
         setNotice(null);
         setDone(true);
-        celebrate(result.message);
+        celebrate();
       } else {
         setNotice({ kind: "error", text: result.message ?? "Ce code n'est pas le bon." });
         setCode("");

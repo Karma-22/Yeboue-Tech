@@ -154,6 +154,90 @@ Il reste une animation du site vitrine, sans rien de cliquable. On améliore son
 
 ---
 
+## H. Le produit, tel qu'il est construit
+
+Tout ce qui suit existe dans le dossier `plateforme/` et se lance sur votre ordinateur. Rien n'est encore en ligne.
+
+### Comment l'essayer
+
+Trois commandes, dans trois fenêtres de terminal ouvertes dans le dossier `plateforme` :
+
+1. `npm run emulators` — attendez la phrase « All emulators ready ».
+2. `npm run dev` — le site s'ouvre sur http://localhost:3000.
+3. `npm run demo` — une seule fois : crée un restaurant d'exemple et deux comptes.
+
+| Pour voir… | Adresse | Compte |
+|---|---|---|
+| Le site vitrine | http://localhost:3000 | — |
+| Un modèle de page | http://localhost:3000/apercu/braise | — |
+| Le restaurant d'exemple, côté client | http://localhost:3000/le-palmier | — |
+| Le même, depuis la table 3 (avec la commande) | http://localhost:3000/le-palmier/t/3 | — |
+| Le tableau de bord du gérant | http://localhost:3000/connexion | `gerant@demo.test` / `demo-1234` |
+| L'administration (vous) | http://localhost:3000/admin | `admin@demo.test` / `demo-1234` |
+
+Votre ordinateur est lent : la **première** ouverture de chaque page prend une à deux minutes, le temps que le site la prépare. Les suivantes sont immédiates. Une fois en ligne, ce délai n'existe pas.
+
+### Le parcours d'un gérant
+
+1. Il touche « Créer mon menu » sur le site : il arrive sur l'inscription, plus sur WhatsApp.
+2. Il saisit son nom, son numéro, son e-mail, un mot de passe.
+3. Il reçoit un code à six chiffres et le tape dans les six cases animées. En local, aucun e-mail ne part : le code est affiché sur la page.
+4. Quatre écrans : **son établissement** (nom, type, quartier, WhatsApp), **l'apparence** (un des dix modèles, sa couleur, son logo, sa photo), **sa carte** (il peut partir d'une carte d'exemple), **son offre**.
+5. Sur le dernier écran, il choisit son offre et confirme son numéro WhatsApp. **Il ne paie rien** : l'essai de 14 jours démarre, sa page est en ligne, son QR Code est prêt.
+
+### Les dix modèles
+
+| Modèle | Son idée |
+|---|---|
+| **Braise** | De grandes photos en cartes, sous une couverture généreuse |
+| **Ardoise** | Le tableau noir du maquis, écrit à la craie |
+| **Table d'hôte** | La carte classique sur papier ivoire |
+| **Comptoir** | La nuit : fond sombre, cocktails en grand |
+| **Palace** | Sobre et raffiné, les services en volets (hôtels) |
+| **Magazine** | Une mise en page de revue, en grands titres |
+| **Épure** | Presque rien : une liste nette, très rapide |
+| **Marché** | Des aplats de couleur, des étiquettes de prix |
+| **Carnet** | Le ticket de caisse, qui sort de l'imprimante |
+| **Vitrine** | Les plats en plein écran, à feuilleter comme des « stories » |
+
+Chaque modèle a sa mise en page, ses polices et ses animations. La couleur choisie par le gérant s'applique à n'importe lequel : le texte posé dessus reste lisible, c'est calculé. Sur la page d'aperçu, les pastilles du bandeau changent la couleur, et les flèches passent d'un modèle à l'autre.
+
+### Ce que le gérant peut faire ensuite
+
+- **Carte** : catégories, articles, prix, photos, ordre, rupture d'un geste. Chaque changement est en ligne tout de suite.
+- **Tables et QR Codes** : il crée ses zones (« Terrasse », 12 tables) ; un QR Code par table, et une planche à imprimer avec tous les codes.
+- **Commandes** : elles arrivent en direct, avec une sonnerie. Accepter, prête, servie. Le client voit l'état changer sur son téléphone.
+- **Apparence**, **Informations** (adresse, horaires, carte en anglais), **Statistiques** (scans, ventes, avis), **Équipe** (inviter un serveur par un lien), **Abonnement**.
+
+### Ce que vous faites, vous, dans l'administration
+
+- Voir les inscrits, les essais en cours, ce que vous avez encaissé.
+- **À relancer** : la liste des essais qui se terminent dans les cinq jours. Un bouton ouvre WhatsApp sur le numéro du gérant, le message déjà écrit.
+- Enregistrer un paiement reçu par Wave ou Orange Money : l'abonnement est prolongé aussitôt.
+- Offrir sept jours d'essai de plus, suspendre un établissement, ou ouvrir le tableau de bord d'un gérant pour l'aider.
+
+### Ce qui n'est pas fait
+
+| Quoi | Pourquoi |
+|---|---|
+| La carte de fidélité | Pas construite. Je l'ai donc retirée de la liste de l'offre à 25 000 F sur le site (il est écrit « Avis des clients après leur commande ») : le site ne promet que ce qui existe. Dites-moi si vous voulez que je la construise. |
+| Les pages Tarifs, Fonctionnement et Contact séparées | La page d'accueil réunit déjà ces trois parties. |
+| Les pages légales (mentions, conditions de vente) | Elles demandent le nom et le statut de votre entreprise. |
+| Le paiement en ligne (GeniusPay) | Il demande un compte marchand. En attendant, le paiement est enregistré à la main. |
+| La connexion avec Google | Remise à plus tard : e-mail et mot de passe suffisent pour commencer. |
+| L'e-mail définitif | Le gabarit actuel est provisoire, en attendant votre maquette. |
+
+### Ce qu'il me faut de vous pour mettre en ligne
+
+1. **Un nom de domaine.** C'est le plus urgent : son adresse est dessinée dans chaque QR Code. On ne peut imprimer aucun QR Code avant.
+2. **L'accès à votre service d'e-mail**, pour que les codes de vérification partent vraiment.
+3. **Un projet Firebase** à votre nom (gratuit pour démarrer).
+4. **La maquette de l'e-mail**, quand vous l'aurez dessinée.
+5. **Vos propres photos** : celles du site viennent de banques d'images.
+6. **Une relecture de l'anglais** du site par quelqu'un dont c'est la langue.
+
+---
+
 ## Sources des prix
 
 - MenuPro : https://menupro.ci/

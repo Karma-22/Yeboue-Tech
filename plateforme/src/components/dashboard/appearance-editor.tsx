@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { saveAppearance, setPageImage } from "@/app/app/[estId]/actions";
 import { Button } from "@/components/ui/button";
 import { FormNotice } from "@/components/ui/form-notice";
+import { Spinner } from "@/components/ui/spinner";
 import { ACCENT_PRESETS, TEMPLATE_IDS, TEMPLATES, type TemplateId } from "@/config/templates";
 import type { EstablishmentType } from "@/lib/db/types";
 import type { UploadedPhoto } from "@/lib/images/resize";
@@ -121,7 +122,15 @@ export function AppearanceEditor(props: AppearanceEditorProps) {
           </div>
           <p className="mt-4 rounded-md bg-surface-sunken px-4 py-3 text-sm">
             <strong>{TEMPLATES[template].name}.</strong> {TEMPLATES[template].description}{" "}
-            <span className="text-fg-muted">Pensé pour : {TEMPLATES[template].suits.toLowerCase()}.</span>
+            <span className="text-fg-muted">Pensé pour : {TEMPLATES[template].suits.toLowerCase()}.</span>{" "}
+            <a
+              href={previewOf(template, isHexColor(colour) ? colour : props.accentColor).replace("cadre=1&", "")}
+              target="_blank"
+              rel="noopener"
+              className="font-semibold whitespace-nowrap underline underline-offset-4"
+            >
+              Le voir en grand
+            </a>
           </p>
         </fieldset>
 
@@ -198,12 +207,17 @@ export function AppearanceEditor(props: AppearanceEditorProps) {
             Aperçu, avec une carte d&apos;exemple
           </p>
           <div className="mx-auto w-fit rounded-[2.3rem] bg-ink p-2.5 shadow-lg">
-            <div className="h-[562px] w-[281px] overflow-hidden rounded-[1.75rem] bg-white">
+            <div className="relative h-[562px] w-[281px] overflow-hidden rounded-[1.75rem] bg-surface-sunken">
+              {/* Visible tant que la page d'aperçu n'a pas fini de se charger par-dessus. */}
+              <p className="absolute inset-0 grid place-content-center justify-items-center gap-3 text-sm text-fg-muted">
+                <Spinner />
+                Chargement de l&apos;aperçu…
+              </p>
               <iframe
                 key={preview}
                 src={preview}
                 title="Aperçu du modèle"
-                className="h-[780px] w-[390px] origin-top-left scale-[0.7205]"
+                className="relative h-[780px] w-[390px] origin-top-left scale-[0.7205]"
               />
             </div>
           </div>

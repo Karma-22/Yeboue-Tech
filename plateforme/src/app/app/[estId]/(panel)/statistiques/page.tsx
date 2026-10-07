@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Star } from "lucide-react";
-import { PageHeader, Section } from "@/components/dashboard/page-header";
+import { BarChart } from "@/components/dashboard/bar-chart";
+import { PageHeader, Section, StatTile } from "@/components/dashboard/page-header";
 import { PLANS } from "@/config/plans";
 import { requireAccess } from "@/lib/auth/session";
 import { panelState } from "@/lib/billing/panel";
@@ -16,46 +17,8 @@ const dayLabel = (date: string) => `${date.slice(8, 10)}/${date.slice(5, 7)}`;
 const sum = (stats: DayStats[], key: "scans" | "orders" | "revenue" | "whatsappOrders") =>
   stats.reduce((total, day) => total + day[key], 0);
 
-/** Un diagramme en bâtons, un bâton par jour. Le tableau des mêmes chiffres suit, pour qui ne voit pas le dessin. */
-function Bars({ stats, value, format, label }: { stats: DayStats[]; value: (day: DayStats) => number; format: (amount: number) => string; label: string }) {
-  const max = Math.max(1, ...stats.map(value));
-  return (
-    <figure>
-      <div role="img" aria-label={`${label}, jour par jour, sur ${stats.length} jours`} className="flex h-40 items-end gap-[3px]">
-        {stats.map((day) => {
-          const amount = value(day);
-          return (
-            <div
-              key={day.date}
-              title={`${dayLabel(day.date)} : ${format(amount)}`}
-              style={{ height: `${Math.max(amount > 0 ? 4 : 1, (amount / max) * 100)}%` }}
-              className={cn("flex-1 rounded-t-[3px]", amount > 0 ? "bg-fg" : "bg-line")}
-            />
-          );
-        })}
-      </div>
-      <figcaption className="mt-2 flex justify-between text-xs text-fg-subtle tabular-nums">
-        <span>{dayLabel(stats[0].date)}</span>
-        <span>Aujourd&apos;hui</span>
-      </figcaption>
-      <details className="mt-3 text-sm">
-        <summary className="cursor-pointer font-semibold text-fg-muted">Voir les chiffres</summary>
-        <table className="mt-2 w-full max-w-xs tabular-nums">
-          <tbody>
-            {[...stats].reverse().map((day) => (
-              <tr key={day.date} className="border-b border-line last:border-b-0">
-                <th scope="row" className="py-1.5 text-left font-normal text-fg-muted">
-                  {dayLabel(day.date)}
-                </th>
-                <td className="py-1.5 text-right font-semibold">{format(value(day))}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </details>
-    </figure>
-  );
-}
+const toPoints = (stats: DayStats[], key: "scans" | "revenue") =>
+  stats.map((day) => ({ key: day.date, label: dayLabel(day.date), value: day[key] }));
 
 export default async function StatsPage({ params }: PageProps<"/app/[estId]/statistiques">) {
   const { estId } = await params;
@@ -80,15 +43,12 @@ export default async function StatsPage({ params }: PageProps<"/app/[estId]/stat
             { label: "Commandes WhatsApp", value: String(sum(stats, "whatsappOrders")) },
             { label: "Commandes sur place", value: panel.features.salesStats ? String(sum(stats, "orders")) : "—" },
           ].map((figure) => (
-            <div key={figure.label} className="rounded-lg border border-line bg-surface-raised p-5">
-              <p className="text-sm text-fg-muted">{figure.label}</p>
-              <p className="mt-1 font-display text-3xl font-bold tabular-nums">{figure.value}</p>
-            </div>
+            <StatTile key={figure.label} {...figure} />
           ))}
         </div>
 
         <Section title="Scans de votre QR Code" description="Chaque client qui ouvre votre carte compte une fois par visite.">
-          <Bars stats={stats} value={(day) => day.scans} format={String} label="Scans" />
+          <BarChart label="Scans" points={toPoints(stats, "scans")} format="count" />
         </Section>
 
         <Section
@@ -96,7 +56,7 @@ export default async function StatsPage({ params }: PageProps<"/app/[estId]/stat
           description={panel.features.salesStats ? `${formatPrice(sum(stats, "revenue"))} sur ${DAYS} jours, commandes refusées ou annulées déduites.` : upgrade}
         >
           {panel.features.salesStats ? (
-            <Bars stats={stats} value={(day) => day.revenue} format={(amount) => formatPrice(amount)} label="Ventes" />
+            <BarChart label="Ventes sur place" points={toPoints(stats, "revenue")} format="price" />
           ) : (
             <p className="text-fg-muted">Le chiffre de chaque jour, calculé à partir des commandes passées depuis les tables.</p>
           )}

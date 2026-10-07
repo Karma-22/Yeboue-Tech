@@ -251,6 +251,8 @@
   --color-danger-text: var(--danger-text);
   --color-danger-soft: var(--danger-soft);
 
+  --color-chart: var(--chart);
+
   --color-focus: var(--focus);
   --color-overlay: var(--overlay);
 }
@@ -293,6 +295,9 @@
     --danger-text: #b4223b;
     --danger-soft: #f4e3df;
 
+    /* La couleur des graphiques : vérifiée sur ce fond (clarté, saturation, contraste 3:1). */
+    --chart: #f2622e;
+
     --focus: #14213d;
     --overlay: rgb(20 33 61 / 0.5);
   }
@@ -324,6 +329,9 @@
     --danger-hover: #d02a45;
     --danger-text: #f18395;
     --danger-soft: #36223d;
+
+    /* Un ton plus bas que sur fond clair : sur fond sombre, la braise pure éblouit. */
+    --chart: #e2531f;
 
     --focus: #faf6ef;
     --overlay: rgb(5 10 22 / 0.65);
