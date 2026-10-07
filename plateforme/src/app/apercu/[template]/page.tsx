@@ -5,12 +5,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { LogoMark } from "@/components/brand/logo";
 import { SHELL_LABELS } from "@/components/public/shell-labels";
 import { SIGNUP_PATH } from "@/config/site";
-import { ACCENT_PRESETS, DEFAULT_ACCENT, isTemplateId, TEMPLATE_IDS, TEMPLATES } from "@/config/templates";
+import { ACCENT_PRESETS, isTemplateId, TEMPLATE_IDS, TEMPLATES } from "@/config/templates";
 import { ESTABLISHMENT_TYPES, type EstablishmentType } from "@/lib/db/types";
 import { cn } from "@/lib/utils/cn";
 import { isHexColor } from "@/lib/utils/color";
 import { TemplatePage } from "@/templates/page";
-import { SAMPLE_FOR_TEMPLATE, sampleData } from "@/templates/sample";
+import { previewData } from "@/templates/showcases";
 
 /*
  * L'aperçu d'un modèle, avec un établissement d'exemple (ARCHITECTURE.md §17).
@@ -31,16 +31,18 @@ export default async function TemplatePreviewPage({ params, searchParams }: Page
   if (!isTemplateId(template)) notFound();
   const query = await searchParams;
 
+  // Sans couleur demandée, chaque modèle se montre dans celle qui lui va le mieux.
   const asked = `#${first(query.couleur) ?? ""}`.toUpperCase();
-  const colour = isHexColor(asked) ? asked : DEFAULT_ACCENT;
+  const chosen = isHexColor(asked) ? asked : null;
+  const colour = chosen ?? TEMPLATES[template].accent;
   const requested = first(query.type) as EstablishmentType | undefined;
   const type = requested && ESTABLISHMENT_TYPES.includes(requested) ? requested : null;
   const framed = first(query.cadre) === "1";
 
-  // Les liens du bandeau gardent les réglages en cours : on change de modèle sans perdre sa couleur.
-  const link = (id: string, hex: string) => {
+  // Les liens du bandeau gardent les réglages en cours : on change de modèle sans perdre la couleur qu'on a choisie.
+  const link = (id: string, hex: string | null) => {
     const search = new URLSearchParams();
-    if (hex !== DEFAULT_ACCENT) search.set("couleur", hex.slice(1));
+    if (hex) search.set("couleur", hex.slice(1));
     if (type) search.set("type", type);
     return `/apercu/${id}${search.size ? `?${search}` : ""}`;
   };
@@ -60,7 +62,7 @@ export default async function TemplatePreviewPage({ params, searchParams }: Page
               <Link href="/#modeles" aria-label="Retour aux modèles" className="mr-1.5 shrink-0 rounded-sm">
                 <LogoMark className="size-7" />
               </Link>
-              <Link href={link(previous, colour)} aria-label={`Modèle précédent : ${TEMPLATES[previous].name}`} className={arrow}>
+              <Link href={link(previous, chosen)} aria-label={`Modèle précédent : ${TEMPLATES[previous].name}`} className={arrow}>
                 <ChevronLeft aria-hidden="true" className="size-5" />
               </Link>
               <p className="min-w-0 truncate px-1 font-semibold">
@@ -71,7 +73,7 @@ export default async function TemplatePreviewPage({ params, searchParams }: Page
                   · {position + 1}/{TEMPLATE_IDS.length}
                 </span>
               </p>
-              <Link href={link(next, colour)} aria-label={`Modèle suivant : ${TEMPLATES[next].name}`} className={arrow}>
+              <Link href={link(next, chosen)} aria-label={`Modèle suivant : ${TEMPLATES[next].name}`} className={arrow}>
                 <ChevronRight aria-hidden="true" className="size-5" />
               </Link>
             </div>
@@ -104,7 +106,7 @@ export default async function TemplatePreviewPage({ params, searchParams }: Page
       <TemplatePage
         template={template}
         accent={colour}
-        data={sampleData(type ?? SAMPLE_FOR_TEMPLATE[template], { withTable: true })}
+        data={previewData(template, type, { withTable: true })}
         ordering={{ mode: "preview" }}
         shellLabels={SHELL_LABELS.fr}
       />

@@ -14,7 +14,7 @@ import {
 } from "@/lib/billing/subscription";
 import { buildOrderLines, canTransition, isOpen } from "@/lib/orders/rules";
 import { qrSvg } from "@/lib/qr/svg";
-import { accentTheme, contrast } from "@/lib/utils/color";
+import { accentTheme, contrast, isHexColor } from "@/lib/utils/color";
 import { slugCandidates, slugify, slugProblem } from "@/lib/utils/slug";
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -199,6 +199,14 @@ describe("couleur du gérant", () => {
     expect(contrast(theme.onAccent, theme.accent)).toBeGreaterThanOrEqual(4.5);
     expect(contrast(theme.textOnLight, "#FAF6EF")).toBeGreaterThanOrEqual(4.5);
     expect(contrast(theme.textOnDark, "#14213D")).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it.each(colors)("%s trouve ses couleurs compagnes", (color) => {
+    const theme = accentTheme(color);
+    for (const value of [theme.companion, theme.third, theme.relief]) expect(isHexColor(value)).toBe(true);
+    // L'encre se lit sur la compagne ; une lettre peinte se détache de son relief.
+    expect(contrast("#14213D", theme.companion)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(theme.onAccent, theme.relief)).toBeGreaterThanOrEqual(3);
   });
 
   it("se rabat sur la braise si la couleur est invalide", () => {

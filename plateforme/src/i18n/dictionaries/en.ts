@@ -247,6 +247,11 @@ export const en: Dictionary = {
       marche: "Blocks of colour and price tags.",
       carnet: "The till receipt, fresh from the printer.",
       vitrine: "Dishes in full screen, to swipe through.",
+      gbaka: "The painted minibus: its stripes and its slogan.",
+      enseigne: "A hand-painted shop sign, prices in stars.",
+      pagne: "Wax-print patterns in your colour, stitched cards.",
+      garba: "Big round plates on a gingham oilcloth.",
+      guirlande: "The night market, under its string of bulbs.",
     },
   },
   solutionPage: {

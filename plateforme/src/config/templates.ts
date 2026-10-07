@@ -1,8 +1,22 @@
 /**
- * Les dix modèles de page d'établissement. Ce fichier décrit chaque modèle ;
- * son dessin est dans src/templates/{id}.tsx.
+ * Les modèles de page d'établissement. Ce fichier décrit chaque modèle ; son
+ * dessin est dans src/templates. La feuille de route des quatre-vingts modèles
+ * est dans TEMPLATES.md, à la racine du dépôt.
  */
 
+/** Les familles : elles servent à s'y retrouver quand on choisit un modèle. */
+export const TEMPLATE_FAMILIES = [
+  { id: "rue", name: "La rue et le quartier" },
+  { id: "tables", name: "Les tables" },
+  { id: "pouce", name: "Sur le pouce" },
+  { id: "nuit", name: "La nuit" },
+  { id: "douceurs", name: "Cafés et douceurs" },
+  { id: "sejour", name: "Hôtels et résidences" },
+  { id: "partis-pris", name: "Partis pris" },
+] as const;
+export type TemplateFamily = (typeof TEMPLATE_FAMILIES)[number]["id"];
+
+/** Dans l'ordre de leur numéro (TEMPLATES.md). Un modèle s'ajoute ici quand il est terminé. */
 export const TEMPLATE_IDS = [
   "braise",
   "ardoise",
@@ -14,6 +28,11 @@ export const TEMPLATE_IDS = [
   "marche",
   "carnet",
   "vitrine",
+  "gbaka",
+  "enseigne",
+  "pagne",
+  "garba",
+  "guirlande",
 ] as const;
 export type TemplateId = (typeof TEMPLATE_IDS)[number];
 
@@ -23,77 +42,17 @@ export function isTemplateId(value: string): value is TemplateId {
 
 export interface TemplateInfo {
   id: TemplateId;
+  /** Son numéro dans TEMPLATES.md. */
+  number: number;
   name: string;
   /** Ce qui le distingue, en une phrase. */
   description: string;
   /** Pour qui il est pensé d'abord. Tous restent utilisables par tous. */
   suits: string;
+  family: TemplateFamily;
+  /** La couleur qui le montre sous son meilleur jour : celle de sa vignette. Le gérant garde la sienne. */
+  accent: string;
 }
-
-export const TEMPLATES: Record<TemplateId, TemplateInfo> = {
-  braise: {
-    id: "braise",
-    name: "Braise",
-    description: "De grandes photos en cartes, sous une couverture généreuse.",
-    suits: "Restaurants et maquis qui ont de belles photos",
-  },
-  ardoise: {
-    id: "ardoise",
-    name: "Ardoise",
-    description: "Le tableau noir du maquis : écriture à la craie, prix alignés.",
-    suits: "Maquis et grillades",
-  },
-  "table-dhote": {
-    id: "table-dhote",
-    name: "Table d'hôte",
-    description: "La carte classique sur papier ivoire, titres en lettres élégantes.",
-    suits: "Restaurants de table",
-  },
-  comptoir: {
-    id: "comptoir",
-    name: "Comptoir",
-    description: "Ambiance de nuit : fond sombre, cocktails en grand, catégories qui glissent.",
-    suits: "Bars et lounges",
-  },
-  palace: {
-    id: "palace",
-    name: "Palace",
-    description: "Sobre et raffiné, avec les services rangés en volets qui s'ouvrent.",
-    suits: "Hôtels",
-  },
-  magazine: {
-    id: "magazine",
-    name: "Magazine",
-    description: "Mise en page de revue : grands numéros, photos qui alternent.",
-    suits: "Tables qui veulent raconter leur cuisine",
-  },
-  epure: {
-    id: "epure",
-    name: "Épure",
-    description: "Presque rien : une liste nette, très rapide à lire et à charger.",
-    suits: "Cartes longues, ou sans photos",
-  },
-  marche: {
-    id: "marche",
-    name: "Marché",
-    description: "Grands aplats de couleur, étiquettes de prix, ton joyeux.",
-    suits: "Restauration rapide et cuisine de rue",
-  },
-  carnet: {
-    id: "carnet",
-    name: "Carnet",
-    description: "Comme un ticket de caisse : papier clair, chiffres alignés, découpes.",
-    suits: "Cafés, snacks, résidences",
-  },
-  vitrine: {
-    id: "vitrine",
-    name: "Vitrine",
-    description: "Chaque catégorie se feuillette comme une suite d'images en plein écran.",
-    suits: "Cartes courtes aux photos fortes",
-  },
-};
-
-export const DEFAULT_TEMPLATE: TemplateId = "braise";
 
 /** Les couleurs proposées d'emblée. Le gérant peut aussi saisir la sienne. */
 export const ACCENT_PRESETS = [
@@ -110,3 +69,154 @@ export const ACCENT_PRESETS = [
 ] as const;
 
 export const DEFAULT_ACCENT = ACCENT_PRESETS[0].value;
+
+/** La couleur conseillée d'un modèle se choisit parmi celles proposées aux gérants. */
+function accent(name: (typeof ACCENT_PRESETS)[number]["name"]): string {
+  return ACCENT_PRESETS.find((preset) => preset.name === name)?.value ?? DEFAULT_ACCENT;
+}
+const BRAISE = accent("Braise");
+const PIMENT = accent("Piment");
+const SAFRAN = accent("Safran");
+const FEUILLE = accent("Feuille");
+const LAGUNE = accent("Lagune");
+const INDIGO = accent("Indigo");
+
+export const TEMPLATES: Record<TemplateId, TemplateInfo> = {
+  braise: {
+    id: "braise",
+    number: 1,
+    name: "Braise",
+    description: "De grandes photos en cartes, sous une couverture généreuse.",
+    suits: "Restaurants et maquis qui ont de belles photos",
+    family: "tables",
+    accent: BRAISE,
+  },
+  ardoise: {
+    id: "ardoise",
+    number: 2,
+    name: "Ardoise",
+    description: "Le tableau noir du maquis : écriture à la craie, prix alignés.",
+    suits: "Maquis et grillades",
+    family: "rue",
+    accent: BRAISE,
+  },
+  "table-dhote": {
+    id: "table-dhote",
+    number: 3,
+    name: "Table d'hôte",
+    description: "La carte classique sur papier ivoire, titres en lettres élégantes.",
+    suits: "Restaurants de table",
+    family: "tables",
+    accent: BRAISE,
+  },
+  comptoir: {
+    id: "comptoir",
+    number: 4,
+    name: "Comptoir",
+    description: "Ambiance de nuit : fond sombre, cocktails en grand, catégories qui glissent.",
+    suits: "Bars et lounges",
+    family: "nuit",
+    accent: BRAISE,
+  },
+  palace: {
+    id: "palace",
+    number: 5,
+    name: "Palace",
+    description: "Sobre et raffiné, avec les services rangés en volets qui s'ouvrent.",
+    suits: "Hôtels",
+    family: "sejour",
+    accent: BRAISE,
+  },
+  magazine: {
+    id: "magazine",
+    number: 6,
+    name: "Magazine",
+    description: "Mise en page de revue : grands numéros, photos qui alternent.",
+    suits: "Tables qui veulent raconter leur cuisine",
+    family: "partis-pris",
+    accent: BRAISE,
+  },
+  epure: {
+    id: "epure",
+    number: 7,
+    name: "Épure",
+    description: "Presque rien : une liste nette, très rapide à lire et à charger.",
+    suits: "Cartes longues, ou sans photos",
+    family: "partis-pris",
+    accent: BRAISE,
+  },
+  marche: {
+    id: "marche",
+    number: 8,
+    name: "Marché",
+    description: "Grands aplats de couleur, étiquettes de prix, ton joyeux.",
+    suits: "Restauration rapide et cuisine de rue",
+    family: "pouce",
+    accent: BRAISE,
+  },
+  carnet: {
+    id: "carnet",
+    number: 9,
+    name: "Carnet",
+    description: "Comme un ticket de caisse : papier clair, chiffres alignés, découpes.",
+    suits: "Cafés, snacks, résidences",
+    family: "douceurs",
+    accent: BRAISE,
+  },
+  vitrine: {
+    id: "vitrine",
+    number: 10,
+    name: "Vitrine",
+    description: "Chaque catégorie se feuillette comme une suite d'images en plein écran.",
+    suits: "Cartes courtes aux photos fortes",
+    family: "partis-pris",
+    accent: BRAISE,
+  },
+  gbaka: {
+    id: "gbaka",
+    number: 11,
+    name: "Gbaka",
+    description: "La carrosserie peinte du minibus : ses bandes, son slogan, ses vitres.",
+    suits: "Maquis, cuisine de rue",
+    family: "rue",
+    accent: SAFRAN,
+  },
+  enseigne: {
+    id: "enseigne",
+    number: 12,
+    name: "Enseigne",
+    description: "L'enseigne peinte à la main : lettres à ombre portée, prix en étoile.",
+    suits: "Maquis, grillades, petits restaurants",
+    family: "rue",
+    accent: PIMENT,
+  },
+  pagne: {
+    id: "pagne",
+    number: 13,
+    name: "Pagne",
+    description: "Le wax : des motifs dessinés dans votre couleur, des cartes cousues.",
+    suits: "Cuisine ivoirienne, traiteurs",
+    family: "rue",
+    accent: INDIGO,
+  },
+  garba: {
+    id: "garba",
+    number: 14,
+    name: "Garba",
+    description: "Le garbadrome : de grandes assiettes rondes, le prix sur une pastille.",
+    suits: "Garbadromes, cantines, cuisine du midi",
+    family: "rue",
+    accent: FEUILLE,
+  },
+  guirlande: {
+    id: "guirlande",
+    number: 15,
+    name: "Guirlande",
+    description: "Le marché de nuit : une guirlande d'ampoules, des étals à auvent rayé.",
+    suits: "Allocodromes, maquis du soir, grillades",
+    family: "rue",
+    accent: LAGUNE,
+  },
+};
+
+export const DEFAULT_TEMPLATE: TemplateId = "braise";

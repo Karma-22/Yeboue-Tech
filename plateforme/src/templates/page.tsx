@@ -1,7 +1,7 @@
 import type { TemplateId } from "@/config/templates";
 import { MenuShell, type Ordering, type PlaceOrderResult } from "@/components/public/menu-shell";
 import type { ShellLabels } from "@/components/public/shell-labels";
-import { TEMPLATE_COMPONENTS } from "./registry";
+import { loadTemplate } from "./registry";
 import type { TemplateData } from "./types";
 
 interface TemplatePageProps {
@@ -15,8 +15,8 @@ interface TemplatePageProps {
 }
 
 /** Une page d'établissement complète : le modèle choisi, sa couleur, et le panier commun à tous. */
-export function TemplatePage({ template, accent, data, ordering, shellLabels, placeOrder }: TemplatePageProps) {
-  const Component = TEMPLATE_COMPONENTS[template];
+export async function TemplatePage({ template, accent, data, ordering, shellLabels, placeOrder }: TemplatePageProps) {
+  const Component = await loadTemplate(template);
   return (
     <MenuShell
       accent={accent}

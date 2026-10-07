@@ -7,7 +7,14 @@ import { saveAppearance, setPageImage } from "@/app/app/[estId]/actions";
 import { Button } from "@/components/ui/button";
 import { FormNotice } from "@/components/ui/form-notice";
 import { Spinner } from "@/components/ui/spinner";
-import { ACCENT_PRESETS, TEMPLATE_IDS, TEMPLATES, type TemplateId } from "@/config/templates";
+import {
+  ACCENT_PRESETS,
+  TEMPLATE_FAMILIES,
+  TEMPLATE_IDS,
+  TEMPLATES,
+  type TemplateFamily,
+  type TemplateId,
+} from "@/config/templates";
 import type { EstablishmentType } from "@/lib/db/types";
 import type { UploadedPhoto } from "@/lib/images/resize";
 import { cn } from "@/lib/utils/cn";
@@ -30,10 +37,20 @@ interface AppearanceEditorProps {
 
 const asPhoto = (url: string | null): UploadedPhoto | null => (url ? { thumb: url, large: url } : null);
 
+/** Les familles qui ont déjà des modèles, précédées de « Tous » : de quoi s'y retrouver parmi des dizaines de mises en page. */
+const FAMILIES: { id: TemplateFamily | "all"; name: string; ids: readonly TemplateId[] }[] = [
+  { id: "all", name: "Tous", ids: TEMPLATE_IDS },
+  ...TEMPLATE_FAMILIES.map((family) => ({ ...family, ids: TEMPLATE_IDS.filter((id) => TEMPLATES[id].family === family.id) })).filter(
+    (family) => family.ids.length > 0,
+  ),
+];
+
 /** Le choix du modèle, de la couleur, du logo et de la couverture, avec l'aperçu sur un téléphone. */
 export function AppearanceEditor(props: AppearanceEditorProps) {
   const { establishmentId, type, submitLabel, after } = props;
   const [template, setTemplate] = useState(props.template);
+  const [family, setFamily] = useState<TemplateFamily | "all">("all");
+  const shown = FAMILIES.find((entry) => entry.id === family)?.ids ?? TEMPLATE_IDS;
   const [colour, setColour] = useState(props.accentColor.toUpperCase());
   const [logo, setLogo] = useState(asPhoto(props.logoUrl));
   const [cover, setCover] = useState(asPhoto(props.coverUrl));
@@ -80,10 +97,32 @@ export function AppearanceEditor(props: AppearanceEditorProps) {
         <fieldset>
           <legend className="font-display text-lg font-bold">Le modèle</legend>
           <p className="mt-1 text-sm text-fg-muted">
-            Dix mises en page. Vous pourrez en changer quand vous voudrez : votre carte suit.
+            {TEMPLATE_IDS.length} mises en page, rangées par famille. Vous pourrez en changer quand vous voudrez : votre carte
+            suit.
           </p>
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
-            {TEMPLATE_IDS.map((id) => {
+          <div
+            role="group"
+            aria-label="Familles de modèles"
+            className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {FAMILIES.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                onClick={() => setFamily(entry.id)}
+                aria-pressed={family === entry.id}
+                className={cn(
+                  "flex h-11 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition-colors",
+                  family === entry.id ? "border-fg bg-fg text-surface" : "border-line-strong text-fg-muted hover:text-fg",
+                )}
+              >
+                {entry.name}
+                <span className="text-xs tabular-nums opacity-70">{entry.ids.length}</span>
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+            {shown.map((id) => {
               const selected = id === template;
               return (
                 <button

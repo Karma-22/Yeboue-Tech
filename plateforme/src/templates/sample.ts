@@ -1,5 +1,4 @@
 import type { StaticImageData } from "next/image";
-import type { TemplateId } from "@/config/templates";
 import type { EstablishmentType } from "@/lib/db/types";
 import barLounge from "@/assets/photos/bar-lounge.jpg";
 import barCocktails from "@/assets/photos/bar-cocktails.jpg";
@@ -24,7 +23,7 @@ import { LABELS, TYPE_LABELS, type TemplateData, type TemplateItem } from "./typ
  * clients : les noms sont inventés, les photos viennent de banques libres.
  */
 
-interface SampleItem {
+export interface SampleItem {
   name: string;
   description: string;
   price: number | null;
@@ -33,7 +32,7 @@ interface SampleItem {
   soldOut?: boolean;
 }
 
-interface Sample {
+export interface Sample {
   name: string;
   description: string;
   district: string;
@@ -237,20 +236,6 @@ export const SAMPLES: Record<EstablishmentType, Sample> = {
   },
 };
 
-/** L'établissement d'exemple qui montre le mieux chaque modèle. */
-export const SAMPLE_FOR_TEMPLATE: Record<TemplateId, EstablishmentType> = {
-  braise: "restaurant",
-  ardoise: "maquis",
-  "table-dhote": "restaurant",
-  comptoir: "bar",
-  palace: "hotel",
-  magazine: "restaurant",
-  epure: "residence",
-  marche: "maquis",
-  carnet: "maquis",
-  vitrine: "bar",
-};
-
 /** Une photo du dépôt, réduite par le serveur à la largeur voulue. */
 function resized(image: StaticImageData, width: 640 | 1200): string {
   return `/_next/image?url=${encodeURIComponent(image.src)}&w=${width}&q=75`;
@@ -258,7 +243,11 @@ function resized(image: StaticImageData, width: 640 | 1200): string {
 
 /** Les données d'un établissement d'exemple, telles qu'un modèle les reçoit. */
 export function sampleData(type: EstablishmentType, options: { withTable?: boolean } = {}): TemplateData {
-  const sample = SAMPLES[type];
+  return buildSample(SAMPLES[type], type, options);
+}
+
+/** Transforme une maison d'exemple en données de modèle. Sert aussi aux maisons d'aperçu (showcases.ts). */
+export function buildSample(sample: Sample, type: EstablishmentType, options: { withTable?: boolean } = {}): TemplateData {
   return {
     name: sample.name,
     type,

@@ -251,6 +251,11 @@ const texts: Dictionary = {
       marche: "Des aplats de couleur, des étiquettes de prix.",
       carnet: "Le ticket de caisse, qui sort de l'imprimante.",
       vitrine: "Les plats en plein écran, à feuilleter.",
+      gbaka: "La carrosserie peinte du minibus, ses bandes et son slogan.",
+      enseigne: "L'enseigne peinte à la main, les prix en étoile.",
+      pagne: "Le wax : des motifs à votre couleur, des cartes cousues.",
+      garba: "De grandes assiettes rondes sur la toile cirée.",
+      guirlande: "Le marché de nuit, sous sa guirlande d'ampoules.",
     },
   },
   solutionPage: {
