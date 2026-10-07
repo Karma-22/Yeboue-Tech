@@ -17,7 +17,13 @@ npm run demo        # terminal 3, une seule fois : crée un restaurant de démon
 
 En développement, tout tourne sur la machine : aucun compte Firebase, aucun coût, aucun risque pour de vraies données. Les réglages sont dans `.env.development`.
 
-Sur une machine lente, attendre que les émulateurs affichent « All emulators ready » avant de lancer le site. La première ouverture de chaque page prend du temps (le site la prépare à ce moment-là) ; les suivantes sont immédiates.
+Sur une machine lente, attendre que les émulateurs affichent « All emulators ready » avant de lancer le site. Si la machine est trop occupée pour qu'ils démarrent, la commande réessaie d'elle-même, jusqu'à trois fois.
+
+### Sur une machine lente : `npm run local`
+
+Avec `npm run dev`, le site prépare chaque page à sa première ouverture : comptez une à deux minutes d'attente par page, puis plus rien. C'est le bon mode pour modifier le code.
+
+Pour simplement **regarder le site ou le faire essayer**, lancer plutôt `npm run local` à la place de `npm run dev` : le site est construit une fois pour toutes (une dizaine de minutes), puis chaque page s'ouvre aussitôt. Les fois suivantes, `npm run local -- --lancer` le relance sans le reconstruire.
 
 ### Ce que crée `npm run demo`
 
@@ -48,7 +54,8 @@ Les émulateurs ont besoin de Java. S'il n'est pas installé sur la machine, le 
 
 | Commande | Rôle |
 |---|---|
-| `npm run dev` | Lance le site en développement |
+| `npm run dev` | Lance le site en développement : chaque modification du code se voit tout de suite |
+| `npm run local` | Construit le site puis le lance en mode rapide, sur les émulateurs. `-- --lancer` pour ne pas reconstruire |
 | `npm run emulators` | Lance Firebase en local ; les données sont gardées dans `.emulator-data` quand on l'arrête avec Ctrl+C |
 | `npm run demo` | Crée l'établissement de démonstration et ses comptes (émulateurs et site lancés) |
 | `npm run admin -- vous@exemple.com` | Donne à un compte existant l'accès à l'administration. Ajouter `--prod` pour le vrai projet |

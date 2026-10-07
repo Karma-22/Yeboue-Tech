@@ -21,7 +21,7 @@ import { sampleData, SAMPLES } from "@/templates/sample";
  */
 
 const PASSWORD = "demo-1234";
-const OWNER = { email: "gerant@demo.test", firstName: "Compte", lastName: "Démo", phone: "2250700000000" };
+const OWNER = { email: "gerant@demo.test", firstName: "Awa", lastName: "Démo", phone: "2250700000000" };
 const ADMIN = { email: "admin@demo.test", firstName: "Admin", lastName: "Démo", phone: "2250700000001" };
 const SLUG = "le-palmier";
 

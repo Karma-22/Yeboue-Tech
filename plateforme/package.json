@@ -4,16 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "local": "node scripts/local.mjs",
     "emulators": "node scripts/emulators.mjs",
+    "demo": "node scripts/demo.mjs",
+    "admin": "node scripts/set-super-admin.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:emulators": "node scripts/emulators.mjs --exec \"npx vitest run --config vitest.emulators.config.mts\"",
-    "demo": "node scripts/demo.mjs",
-    "admin": "node scripts/set-super-admin.mjs"
+    "test:emulators": "node scripts/emulators.mjs --exec \"npx vitest run --config vitest.emulators.config.mts\""
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

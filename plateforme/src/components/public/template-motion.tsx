@@ -18,24 +18,30 @@ import { useEffect, useRef } from "react";
 
 type Vars = Record<string, string | number>;
 
+/*
+ * Un élément qui attend son entrée est transparent, mais jamais retiré de la
+ * page (pas de `visibility: hidden`) : il reste atteignable au clavier et lu
+ * par les lecteurs d'écran, qui n'ont pas à faire défiler pour le découvrir.
+ */
+
 const FROM: Record<string, Vars> = {
-  up: { autoAlpha: 0, y: 32 },
-  fade: { autoAlpha: 0 },
-  left: { autoAlpha: 0, x: -36 },
-  right: { autoAlpha: 0, x: 36 },
-  pop: { autoAlpha: 0, scale: 0.82, rotation: -4 },
+  up: { opacity: 0, y: 32 },
+  fade: { opacity: 0 },
+  left: { opacity: 0, x: -36 },
+  right: { opacity: 0, x: 36 },
+  pop: { opacity: 0, scale: 0.82, rotation: -4 },
   clip: { clipPath: "inset(0 0 100% 0)" },
-  write: { autoAlpha: 0, x: -14 },
+  write: { opacity: 0, x: -14 },
 };
 
 const TO: Record<string, Vars> = {
-  up: { autoAlpha: 1, y: 0, duration: 0.75, ease: "power3.out" },
-  fade: { autoAlpha: 1, duration: 0.9, ease: "power2.out" },
-  left: { autoAlpha: 1, x: 0, duration: 0.75, ease: "power3.out" },
-  right: { autoAlpha: 1, x: 0, duration: 0.75, ease: "power3.out" },
-  pop: { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.9)" },
+  up: { opacity: 1, y: 0, duration: 0.75, ease: "power3.out" },
+  fade: { opacity: 1, duration: 0.9, ease: "power2.out" },
+  left: { opacity: 1, x: 0, duration: 0.75, ease: "power3.out" },
+  right: { opacity: 1, x: 0, duration: 0.75, ease: "power3.out" },
+  pop: { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.9)" },
   clip: { clipPath: "inset(0 0 0% 0)", duration: 1, ease: "power3.inOut" },
-  write: { autoAlpha: 1, x: 0, duration: 0.5, ease: "power2.out" },
+  write: { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" },
 };
 
 export function TemplateMotion() {

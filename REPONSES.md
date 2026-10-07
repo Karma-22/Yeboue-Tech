@@ -160,11 +160,12 @@ Tout ce qui suit existe dans le dossier `plateforme/` et se lance sur votre ordi
 
 ### Comment l'essayer
 
-Trois commandes, dans trois fenêtres de terminal ouvertes dans le dossier `plateforme` :
+Deux commandes, dans deux fenêtres de terminal ouvertes dans le dossier `plateforme` :
 
-1. `npm run emulators` — attendez la phrase « All emulators ready ».
-2. `npm run dev` — le site s'ouvre sur http://localhost:3000.
-3. `npm run demo` — une seule fois : crée un restaurant d'exemple et deux comptes.
+1. `npm run emulators` — attendez la phrase « All emulators ready ». Si votre ordinateur est trop occupé, la commande réessaie toute seule.
+2. `npm run local` — la première fois, le site se construit : comptez une dizaine de minutes. Ensuite il est sur http://localhost:3000, et **chaque page s'ouvre aussitôt**. Les fois suivantes : `npm run local -- --lancer`, sans attente.
+
+Le restaurant d'exemple et ses deux comptes sont déjà enregistrés. (Si un jour ils manquent : `npm run demo` les recrée.)
 
 | Pour voir… | Adresse | Compte |
 |---|---|---|
@@ -175,7 +176,9 @@ Trois commandes, dans trois fenêtres de terminal ouvertes dans le dossier `plat
 | Le tableau de bord du gérant | http://localhost:3000/connexion | `gerant@demo.test` / `demo-1234` |
 | L'administration (vous) | http://localhost:3000/admin | `admin@demo.test` / `demo-1234` |
 
-Votre ordinateur est lent : la **première** ouverture de chaque page prend une à deux minutes, le temps que le site la prépare. Les suivantes sont immédiates. Une fois en ligne, ce délai n'existe pas.
+Pour passer d'un compte à l'autre, déconnectez-vous d'abord (ou ouvrez une fenêtre de navigation privée).
+
+**Pourquoi `npm run local` et pas `npm run dev` ?** Avec `npm run dev`, le site prépare chaque page au moment où vous l'ouvrez : sur votre ordinateur, c'est une à deux minutes d'attente par page. C'est le mode pour modifier le code. Pour regarder et faire essayer, `npm run local` est bien plus agréable. Une fois le site en ligne, ce délai n'existe pas du tout.
 
 ### Le parcours d'un gérant
 
