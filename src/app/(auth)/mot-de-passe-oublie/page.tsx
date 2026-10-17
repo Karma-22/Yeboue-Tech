@@ -17,8 +17,8 @@ async function devCodeFor(email: string): Promise<string | null> {
 }
 
 export default async function ForgotPasswordPage({ searchParams }: PageProps<"/mot-de-passe-oublie">) {
-  const { email } = await searchParams;
-  const address = typeof email === "string" ? email : null;
+  const params = await searchParams;
+  const address = typeof params?.email === "string" ? params.email : null;
   const devCode = address ? await devCodeFor(address) : null;
 
   return (

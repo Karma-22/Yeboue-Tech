@@ -9,7 +9,8 @@ export const metadata: Metadata = { title: "Connexion" };
 export default async function SignInPage({ searchParams }: PageProps<"/connexion">) {
   const session = await getSession();
   if (session) redirect(session.emailVerified ? "/app" : "/verification");
-  const { motdepasse } = await searchParams;
+  const params = await searchParams;
+  const motdepasse = params?.motdepasse;
 
   return (
     <>
