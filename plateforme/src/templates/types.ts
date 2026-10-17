@@ -26,6 +26,8 @@ export interface TemplateCategory {
 }
 
 export interface TemplateData {
+  /** La langue de la page : un modèle qui a ses propres mots (« À la une », « Coup d'envoi ») les choisit d'après elle. */
+  lang: "fr" | "en";
   name: string;
   type: EstablishmentType;
   /** Le type, écrit dans la langue du client : « Maquis », « Hotel ». */

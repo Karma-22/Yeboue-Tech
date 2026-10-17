@@ -12,3 +12,9 @@ Elles viennent de Google Fonts et sont libres (licences OFL ou Apache) : usage c
 | `rammetto-one-400.woff2` | Rammetto One, graisse 400 | https://fonts.google.com/specimen/Rammetto+One |
 | `baloo-2-var.woff2` | Baloo 2, graisse 400 800 | https://fonts.google.com/specimen/Baloo+2 |
 | `amatic-sc-700.woff2` | Amatic SC, graisse 700 | https://fonts.google.com/specimen/Amatic+SC |
+| `patrick-hand-400.woff2` | Patrick Hand, graisse 400 | https://fonts.google.com/specimen/Patrick+Hand |
+| `playwrite-fr-moderne-400.woff2` | Playwrite FR Moderne, graisse 400 | https://fonts.google.com/specimen/Playwrite+FR+Moderne |
+| `big-shoulders-display-var.woff2` | Big Shoulders Display, graisse 100 900 | https://fonts.google.com/specimen/Big+Shoulders+Display |
+| `anton-400.woff2` | Anton, graisse 400 | https://fonts.google.com/specimen/Anton |
+| `stardos-stencil-700.woff2` | Stardos Stencil, graisse 700 | https://fonts.google.com/specimen/Stardos+Stencil |
+| `caprasimo-400.woff2` | Caprasimo, graisse 400 | https://fonts.google.com/specimen/Caprasimo |

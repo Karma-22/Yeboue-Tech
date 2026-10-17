@@ -3,8 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { EstablishmentView } from "@/components/public/establishment-view";
 import { loadPublicPage } from "@/lib/public/load";
 
-/* La page d'un établissement, ouverte depuis le QR Code d'une table : la commande part au comptoir. */
-
+ 
 export async function generateMetadata({ params }: PageProps<"/[slug]/t/[number]">): Promise<Metadata> {
   const page = await loadPublicPage((await params).slug);
   // Une adresse par table : inutile que les moteurs de recherche les retiennent toutes.

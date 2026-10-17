@@ -252,6 +252,8 @@ export const en: Dictionary = {
       pagne: "Wax-print patterns in your colour, stitched cards.",
       garba: "Big round plates on a gingham oilcloth.",
       guirlande: "The night market, under its string of bulbs.",
+      ecolier: "A school exercise book, prices circled in red pen.",
+      stade: "Match day: a split-flap scoreboard and shirt numbers.",
     },
   },
   solutionPage: {

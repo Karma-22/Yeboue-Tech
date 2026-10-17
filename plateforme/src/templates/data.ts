@@ -13,6 +13,7 @@ export function toTemplateData(
   const pick = (french: string, translated: string) => (english && translated ? translated : french);
 
   return {
+    lang,
     name: establishment.name,
     type: establishment.type,
     typeLabel: TYPE_LABELS[establishment.type][lang],

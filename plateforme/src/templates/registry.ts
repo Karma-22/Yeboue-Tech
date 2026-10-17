@@ -24,6 +24,8 @@ const LOADERS: Record<TemplateId, () => Promise<Template>> = {
   pagne: () => import("./pagne").then((module) => module.Pagne),
   garba: () => import("./garba").then((module) => module.Garba),
   guirlande: () => import("./guirlande").then((module) => module.Guirlande),
+  ecolier: () => import("./ecolier").then((module) => module.Ecolier),
+  stade: () => import("./stade").then((module) => module.Stade),
 };
 
 export function loadTemplate(id: TemplateId): Promise<Template> {

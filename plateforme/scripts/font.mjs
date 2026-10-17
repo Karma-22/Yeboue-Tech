@@ -56,12 +56,15 @@ for (const spec of wanted) {
   }
 
   const text = await sheet.text();
-  const block = text.split("/* latin */")[1];
+  // La plupart des polices sont servies par tranches d'alphabet ; quelques-unes en un seul fichier.
+  const whole = text.includes("/* fallback */") || !/\/\* [a-z-]+ \*\//.test(text);
+  const block = whole ? text : text.split("/* latin */")[1];
   const url = block?.match(/url\((https:[^)]+\.woff2)\)/)?.[1];
   const range = block?.match(/font-weight:\s*([^;]+);/)?.[1].trim() ?? weight;
   if (!url) {
     console.error(`\n« ${family} » en ${spec} : pas de tranche latine dans la réponse de Google Fonts.\n`);
-    process.exit(1);
+    process.exitCode = 1;
+    break;
   }
 
   const file = `${slug}-${variable ? "var" : weight}${italic ? "-italic" : ""}.woff2`;

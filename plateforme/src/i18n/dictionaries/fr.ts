@@ -256,6 +256,8 @@ const texts: Dictionary = {
       pagne: "Le wax : des motifs à votre couleur, des cartes cousues.",
       garba: "De grandes assiettes rondes sur la toile cirée.",
       guirlande: "Le marché de nuit, sous sa guirlande d'ampoules.",
+      ecolier: "Le cahier d'écolier, les prix entourés au stylo rouge.",
+      stade: "Le jour de match : tableau à volets et numéros de maillot.",
     },
   },
   solutionPage: {

@@ -33,6 +33,8 @@ export const TEMPLATE_IDS = [
   "pagne",
   "garba",
   "guirlande",
+  "ecolier",
+  "stade",
 ] as const;
 export type TemplateId = (typeof TEMPLATE_IDS)[number];
 
@@ -80,6 +82,7 @@ const SAFRAN = accent("Safran");
 const FEUILLE = accent("Feuille");
 const LAGUNE = accent("Lagune");
 const INDIGO = accent("Indigo");
+const PRUNE = accent("Prune");
 
 export const TEMPLATES: Record<TemplateId, TemplateInfo> = {
   braise: {
@@ -216,6 +219,24 @@ export const TEMPLATES: Record<TemplateId, TemplateInfo> = {
     suits: "Allocodromes, maquis du soir, grillades",
     family: "rue",
     accent: LAGUNE,
+  },
+  ecolier: {
+    id: "ecolier",
+    number: 16,
+    name: "Écolier",
+    description: "Le cahier d'écolier : la carte écrite à l'encre bleue, les prix entourés en rouge.",
+    suits: "Cantines, snacks, petits maquis",
+    family: "rue",
+    accent: PRUNE,
+  },
+  stade: {
+    id: "stade",
+    number: 17,
+    name: "Stade",
+    description: "Le jour de match : un tableau à volets, la pelouse, un numéro de maillot par article.",
+    suits: "Maquis et bars qui diffusent les matchs",
+    family: "rue",
+    accent: BRAISE,
   },
 };
 

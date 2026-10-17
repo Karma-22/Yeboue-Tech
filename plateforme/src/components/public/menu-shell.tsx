@@ -39,6 +39,9 @@ interface MenuContextValue {
   add: (itemId: string) => void;
   remove: (itemId: string) => void;
   open: (item: TemplateItem) => void;
+  /** Le nombre d'articles au panier, et leur total en FCFA. */
+  count: number;
+  total: number;
 }
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -47,6 +50,12 @@ function useMenu(): MenuContextValue {
   const value = useContext(MenuContext);
   if (!value) throw new Error("ItemTrigger et QuickAdd doivent être placés dans un MenuShell.");
   return value;
+}
+
+/** L'état du panier, pour un modèle qui veut le montrer à sa façon (l'aiguille d'une balance, un compteur). */
+export function useCart(): { canOrder: boolean; count: number; total: number } {
+  const { canOrder, count, total } = useMenu();
+  return { canOrder, count, total };
 }
 
 /** Un article peut-il aller dans le panier ? Il lui faut un prix, et ne pas être en rupture. */
@@ -99,8 +108,10 @@ export function MenuShell({ accent, ordering, items, labels, placeOrder, classNa
           return next;
         }),
       open: setOpenItem,
+      count,
+      total,
     }),
-    [canOrder, cart, labels.add],
+    [canOrder, cart, labels.add, count, total],
   );
 
   const send = () => {

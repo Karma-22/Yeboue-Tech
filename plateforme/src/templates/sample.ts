@@ -249,6 +249,7 @@ export function sampleData(type: EstablishmentType, options: { withTable?: boole
 /** Transforme une maison d'exemple en données de modèle. Sert aussi aux maisons d'aperçu (showcases.ts). */
 export function buildSample(sample: Sample, type: EstablishmentType, options: { withTable?: boolean } = {}): TemplateData {
   return {
+    lang: "fr",
     name: sample.name,
     type,
     typeLabel: TYPE_LABELS[type].fr,

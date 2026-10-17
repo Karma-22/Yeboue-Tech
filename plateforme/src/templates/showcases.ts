@@ -10,16 +10,20 @@ import nightGrill from "@/assets/photos/grillade-nuit.jpg";
 import chickens from "@/assets/photos/grillade-poulets.jpg";
 import grill from "@/assets/photos/maquis-poisson-braise.jpg";
 import alloco from "@/assets/photos/plat-alloco.jpg";
+import beignets from "@/assets/photos/plat-beignets-bouillie.jpg";
 import skewers from "@/assets/photos/plat-brochettes.jpg";
 import chickenSkewers from "@/assets/photos/plat-brochettes-poulet.jpg";
 import beefSkewers from "@/assets/photos/plat-brochettes-viande.jpg";
 import foutou from "@/assets/photos/plat-foutou.jpg";
 import corn from "@/assets/photos/plat-mais-braise.jpg";
+import omelette from "@/assets/photos/plat-omelette.jpg";
 import friedFish from "@/assets/photos/plat-poisson-frit.jpg";
 import chicken from "@/assets/photos/plat-poulet-braise.jpg";
 import rice from "@/assets/photos/plat-riz-gras.jpg";
 import leafSauce from "@/assets/photos/plat-sauce-feuille.jpg";
+import spaghetti from "@/assets/photos/plat-spaghetti.jpg";
 import smallFry from "@/assets/photos/snack-friture.jpg";
+import veggieSandwich from "@/assets/photos/snack-sandwich-crudites.jpg";
 import spread from "@/assets/photos/table-plats-du-pays.jpg";
 import { buildSample, sampleData, type Sample } from "./sample";
 import type { TemplateData } from "./types";
@@ -237,6 +241,46 @@ const SHOWCASES = {
       },
     ],
   },
+
+  mado: {
+    type: "maquis",
+    name: "La Cantine de Mado",
+    description: "À deux pas du lycée : le petit-déjeuner dès 6 h 30, et à midi le plat chaud qui tient jusqu'au soir.",
+    district: "Yopougon",
+    address: "Face au lycée, Yopougon Toits-Rouges",
+    hours: "Du lundi au samedi, 6 h 30 – 18 h",
+    cover: beignets,
+    tableLabel: "Table 4",
+    categories: [
+      {
+        name: "Le matin",
+        items: [
+          { name: "Beignets et bouillie", description: "Beignets de haricot tout chauds, bouillie de mil.", price: 300, photo: beignets },
+          { name: "Pain omelette", description: "Deux œufs, oignons, tomate, dans une demi-baguette.", price: 500, photo: omelette },
+          { name: "Café au lait", description: "Le grand verre.", price: 200 },
+          { name: "Thé citron", description: "Bien sucré.", price: 150 },
+        ],
+      },
+      {
+        name: "À midi",
+        items: [
+          { name: "Spaghetti sauce tomate", description: "L'assiette, avec du piment si on veut.", price: 700, photo: spaghetti },
+          { name: "Sandwich crudités", description: "Baguette, tomate, salade, mayonnaise.", price: 600, photo: veggieSandwich },
+          { name: "Riz gras", description: "Le bol.", price: 800, photo: rice },
+          { name: "Alloco", description: "Le sachet.", price: 300, photo: alloco },
+          { name: "Garba", description: "Attiéké et thon frit.", price: 500, soldOut: true },
+        ],
+      },
+      {
+        name: "Pour boire",
+        items: [
+          { name: "Jus de fruits", description: "La petite bouteille, orange ou ananas.", price: 200, photo: bottledJuice },
+          { name: "Bissap glacé", description: "Le sachet.", price: 100 },
+          { name: "Eau", description: "Le sachet.", price: 50 },
+        ],
+      },
+    ],
+  },
 } satisfies Record<string, Showcase>;
 
 type ShowcaseId = keyof typeof SHOWCASES;
@@ -258,6 +302,8 @@ const HOUSE_FOR_TEMPLATE: Record<TemplateId, ShowcaseId | EstablishmentType> = {
   pagne: "akissi",
   garba: "carrefour",
   guirlande: "lucioles",
+  ecolier: "mado",
+  stade: "maquis",
 };
 
 /**
