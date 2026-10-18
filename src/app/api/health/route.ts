@@ -20,10 +20,38 @@ export async function GET() {
     firebaseAdminImportError = err instanceof Error ? `${err.message}\n${err.stack}` : String(err);
   }
 
+  let getSessionError: string | null = null;
+  try {
+    const { getSession } = await import("@/lib/auth/session");
+    const session = await getSession();
+    getSessionError = session ? "session found" : "no session (null)";
+  } catch (err: unknown) {
+    getSessionError = err instanceof Error ? `${err.message}\n${err.stack}` : String(err);
+  }
+
+  let adminAuthError: string | null = null;
+  try {
+    const { adminAuth } = await import("@/lib/firebase/admin");
+    adminAuth();
+  } catch (err: unknown) {
+    adminAuthError = err instanceof Error ? `${err.message}\n${err.stack}` : String(err);
+  }
+
+  let authActionsError: string | null = null;
+  try {
+    const actions = await import("@/app/(auth)/actions");
+    authActionsError = actions ? "imported actions ok" : "actions empty";
+  } catch (err: unknown) {
+    authActionsError = err instanceof Error ? `${err.message}\n${err.stack}` : String(err);
+  }
+
   return NextResponse.json({
     status: "ok",
     nodeVersion: process.version,
     envCheck,
     firebaseAdminImportError,
+    getSessionError,
+    adminAuthError,
+    authActionsError,
   });
 }
